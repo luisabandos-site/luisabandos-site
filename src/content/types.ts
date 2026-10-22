@@ -52,8 +52,8 @@ export type Service = {
   title: string;
   tags: string[];
   href: string;
-  /** Duas fotos que aparecem inclinadas no hover. */
-  preview: [Photo, Photo];
+  /** Até duas fotos que aparecem inclinadas no hover. */
+  preview: Photo[];
 };
 
 export type SiteContent = {
