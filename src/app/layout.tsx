@@ -1,24 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import { getSiteContent } from "@/lib/content";
 import { INTRO_SEEN_KEY } from "@/components/intro/constants";
-import { ogImage } from "@/lib/sanity/image";
+import { pageMetadata, SITE_URL } from "@/lib/seo";
 import { archivo, archivoItalic, geist } from "./fonts";
 
+/**
+ * Padrão de todas as páginas. Cada página completa com o próprio título,
+ * descrição e endereço oficial (ver `pageMetadata`). O favicon e os ícones
+ * são os arquivos `favicon.ico`, `icon.svg` e `apple-icon.png` desta pasta.
+ */
 export async function generateMetadata(): Promise<Metadata> {
-  const { seo, hero } = await getSiteContent();
+  const content = await getSiteContent();
   return {
-    metadataBase: new URL(seo.url),
+    ...pageMetadata(content, {}),
+    metadataBase: new URL(SITE_URL),
     // As outras páginas viram "Projetos — Luísa Bandos".
-    title: { default: seo.title, template: `%s — ${hero.name}` },
-    description: seo.description,
-    openGraph: {
-      title: seo.title,
-      description: seo.description,
-      type: "website",
-      locale: "pt_BR",
-      images: hero.images.slice(0, 1).map(ogImage),
-    },
-    twitter: { card: "summary_large_image" },
+    title: { default: content.seo.title, template: `%s — ${content.hero.name}` },
+    applicationName: content.hero.name,
+    verification: content.seo.googleVerification ? { google: content.seo.googleVerification } : undefined,
   };
 }
 

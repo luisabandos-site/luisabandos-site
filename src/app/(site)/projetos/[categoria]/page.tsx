@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSiteContent } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 import { ProjectsPage } from "@/components/projects-page/ProjectsPage";
 
 type Props = { params: Promise<{ categoria: string }> };
@@ -24,7 +25,14 @@ async function findCategory(params: Props["params"]) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { content, category } = await findCategory(params);
-  return { title: `${category.title} · ${content.projectsPage.title}`, description: category.description };
+  const { title, description, photos } = content.projectsPage;
+  return pageMetadata(content, {
+    title: `${category.title} · ${title}`,
+    description: category.description || description,
+    path: `/projetos/${category.slug}`,
+    // A prévia do link mostra a primeira foto da categoria.
+    image: photos.find((photo) => photo.category?.slug === category.slug),
+  });
 }
 
 export default async function ProjetosCategoria({ params }: Props) {

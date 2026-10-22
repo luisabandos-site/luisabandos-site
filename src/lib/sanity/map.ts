@@ -50,6 +50,9 @@ function toPhoto(image: SanityPicture | undefined, id: string, extra: Partial<Ph
   };
 }
 
+/** Aceita só o código ou a tag inteira do Search Console (<meta … content="código" />). */
+const verificationCode = (value?: string) => value?.match(/content=["']([^"']+)["']/)?.[1] ?? (value?.trim() || undefined);
+
 function toPortfolioPhoto(image: SanityPhoto, category: Category, name: string): Photo | null {
   const photo = toPhoto(image, `${category.slug}-${image._key}`, { category });
   if (!photo) return null;
@@ -100,8 +103,9 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
     ];
     content.seo = {
       title: settings.seo?.title || fallback.seo.title,
-      description: text(settings.seo?.description),
-      url: settings.seo?.url || fallback.seo.url,
+      description: settings.seo?.description || fallback.seo.description,
+      image: toPhoto(settings.seo?.image, "compartilhar") ?? undefined,
+      googleVerification: verificationCode(settings.seo?.googleVerification),
     };
     content.contact = {
       label: text(settings.contact?.label),

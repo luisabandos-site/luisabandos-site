@@ -13,7 +13,10 @@ const picture = `alt, crop, hotspot, ${asset}`;
 
 /** Todo o conteúdo do site numa consulta só (só o que está publicado). */
 export const siteQuery = `{
-  "settings": *[_id == "settings"][0],
+  "settings": *[_id == "settings"][0]{
+    ...,
+    seo { ..., image { ${picture} } }
+  },
   "home": *[_id == "home"][0]{
     ...,
     heroImages[defined(asset)]{ _key, ${picture} },
@@ -73,7 +76,7 @@ export type SiteQueryResult = {
       channels?: { label?: string; items?: LinkValue[] }[];
     };
     footer?: { copyright?: string; tagline?: string; backToTop?: string };
-    seo?: { title?: string; description?: string; url?: string };
+    seo?: { title?: string; description?: string; image?: SanityPicture; googleVerification?: string };
   } | null;
   home: {
     name?: string;

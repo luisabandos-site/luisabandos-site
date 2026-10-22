@@ -11,8 +11,6 @@ export const site: SiteContent = {
     title: "Luísa Bandos — Fotografia e direção de fotografia",
     description:
       "Fotógrafa e diretora de fotografia em São Carlos, SP. Retratos, eventos, shows, still, making of e audiovisual.",
-    // PROVISÓRIO: trocar pelo domínio final quando existir.
-    url: "https://luisabandos.vercel.app",
   },
   brand: "Luisa Bandos",
   nav: [
