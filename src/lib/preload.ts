@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import type { Photo } from "@/content/types";
+import { PHOTO_QUALITY } from "./quality";
 import { loaderFor } from "./sanity/image";
 
 const requested = new Map<string, Promise<void>>();
@@ -9,9 +10,14 @@ const requested = new Map<string, Promise<void>>();
  * (tamanho e formato) que o <Image> vai pedir. Assim, quando ela entra, já
  * está pronta no cache do navegador.
  */
-export function preloadPhoto(photo: Photo, sizes: string, priority: "high" | "low" | "auto" = "auto") {
+export function preloadPhoto(
+  photo: Photo,
+  sizes: string,
+  priority: "high" | "low" | "auto" = "auto",
+  quality = PHOTO_QUALITY,
+) {
   if (typeof window === "undefined") return Promise.resolve();
-  const key = `${photo.src}|${sizes}`;
+  const key = `${photo.src}|${sizes}|${quality}`;
   const pending = requested.get(key);
   if (pending) return pending;
 
@@ -21,7 +27,7 @@ export function preloadPhoto(photo: Photo, sizes: string, priority: "high" | "lo
     alt: "",
     fill: true,
     sizes,
-    quality: 85,
+    quality,
   });
   const promise = new Promise<void>((resolve) => {
     const img = new window.Image();

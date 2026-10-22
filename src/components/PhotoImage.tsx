@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { Photo } from "@/content/types";
+import { PHOTO_QUALITY } from "@/lib/quality";
 import { loaderFor } from "@/lib/sanity/image";
 import styles from "./PhotoImage.module.css";
 
@@ -15,6 +16,8 @@ type Props = {
   eager?: boolean;
   /** Prioridade do download em relação às outras fotos. */
   fetchPriority?: "high" | "low" | "auto";
+  /** Qualidade da versão baixada (ver src/lib/quality.ts). */
+  quality?: number;
   alt?: string;
   onLoad?: () => void;
 };
@@ -25,7 +28,7 @@ type Props = {
  * prioritária que ainda está chegando quando a página fica pronta entra com
  * um fade curto. Ocupa todo o container (que precisa ter `position: relative`).
  */
-export function PhotoImage({ photo, sizes, preload, eager, fetchPriority, alt, onLoad }: Props) {
+export function PhotoImage({ photo, sizes, preload, eager, fetchPriority, quality = PHOTO_QUALITY, alt, onLoad }: Props) {
   const rootRef = useRef<HTMLSpanElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -55,7 +58,7 @@ export function PhotoImage({ photo, sizes, preload, eager, fetchPriority, alt, o
         alt={alt ?? photo.alt}
         fill
         sizes={sizes}
-        quality={85}
+        quality={quality}
         preload={preload}
         loading={eager ? "eager" : undefined}
         fetchPriority={fetchPriority ?? (eager ? "high" : undefined)}
