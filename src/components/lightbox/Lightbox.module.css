@@ -1,0 +1,196 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--black);
+  color: var(--white);
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px var(--margin);
+  color: var(--muted-dark);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--white);
+}
+
+.closeLabel {
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.closeIcon {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-dark);
+  border-radius: 50%;
+  transition:
+    transform 0.6s var(--ease-out),
+    background-color 0.3s,
+    border-color 0.3s;
+}
+
+.closeIcon::before,
+.closeIcon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.closeIcon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.close:hover .closeIcon,
+.close:focus-visible .closeIcon {
+  transform: rotate(90deg);
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--black);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 0 var(--margin);
+  overflow: hidden;
+}
+
+/* Encaixa a foto inteira na tela, respeitando a proporção. */
+.frame {
+  --max-w: calc(100vw - 2 * var(--margin));
+  --max-h: calc(100svh - 230px);
+  position: relative;
+  aspect-ratio: var(--ratio);
+  width: min(var(--max-w), calc(var(--max-h) * var(--w) / var(--h)));
+  overflow: hidden;
+  cursor: grab;
+}
+
+.frame:active {
+  cursor: grabbing;
+}
+
+.zoom {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px var(--margin) 28px;
+}
+
+.caption {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 280px));
+  gap: var(--gutter);
+  margin: 0;
+  flex: 1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-dark);
+}
+
+.field dt {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mask {
+  margin: 0;
+  overflow: hidden;
+}
+
+.value {
+  display: inline-block;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.arrow {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-dark);
+  border-radius: 50%;
+  font-family: var(--font-label);
+  font-size: 18px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.arrow:hover,
+.arrow:focus-visible {
+  background: var(--white);
+  color: var(--black);
+}
+
+@media (max-width: 767px) {
+  .frame {
+    --max-h: calc(100svh - 300px);
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: stretch;
+    padding-bottom: 20px;
+  }
+
+  .caption {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .field:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .value {
+    font-size: 18px;
+  }
+
+  .arrows {
+    display: none;
+  }
+}

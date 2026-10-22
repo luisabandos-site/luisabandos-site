@@ -1,0 +1,10 @@
+.heroTrack {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+
+.over {
+  position: relative;
+  z-index: 1;
+}

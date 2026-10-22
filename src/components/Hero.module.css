@@ -1,0 +1,136 @@
+.root {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 45%);
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+}
+
+.content {
+  position: absolute;
+  left: var(--margin);
+  right: var(--margin);
+  bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.name {
+  font-weight: inherit;
+}
+
+.fit {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Recorte para as letras subirem; o respiro de cima mostra o acento do Í. */
+.mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-top: 0.14em;
+  margin-top: -0.14em;
+  vertical-align: bottom;
+}
+
+.char {
+  display: inline-block;
+  will-change: transform;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: -0.04em;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+}
+
+.socials li {
+  display: flex;
+  align-items: center;
+}
+
+.slash {
+  margin: 0 24px;
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.social {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.5s var(--ease-out);
+}
+
+.social:hover {
+  background-size: 100% 1px;
+}
+
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  column-gap: 16px;
+}
+
+@media (max-width: 767px) {
+  .content {
+    bottom: 28px;
+    gap: 16px;
+  }
+
+  .meta {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .roles {
+    justify-content: flex-start;
+    column-gap: 6px;
+  }
+
+  .socials {
+    justify-content: space-between;
+  }
+
+  .slash {
+    margin: 0 18px;
+  }
+}
