@@ -26,11 +26,15 @@ export function useIntro() {
 
 const noop = () => () => {};
 
-/** Lê a marca que o script do <head> deixa quando a intro já foi vista. */
+/**
+ * Lê a marca que o script do <head> deixa quando a intro já foi vista. Fora
+ * da home a intro nunca abre, mesmo se a marca se perder (ex.: página 404,
+ * que o React monta do zero).
+ */
 function useSkipped() {
   return useSyncExternalStore(
     noop,
-    () => document.documentElement.dataset.intro === "skip",
+    () => document.documentElement.dataset.intro === "skip" || window.location.pathname !== "/",
     () => false,
   );
 }

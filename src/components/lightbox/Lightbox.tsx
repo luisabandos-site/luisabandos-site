@@ -108,6 +108,8 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
     ["Lugar", photo.location],
     ["Data", formatPhotoDate(photo.date)],
   ];
+  // Campo não preenchido no painel não aparece.
+  const filled = fields.filter(([, value]) => value);
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -60 || info.velocity.x < -400) go(1);
@@ -181,7 +183,7 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
 
       <div className={styles.bottom}>
         <dl className={styles.caption} key={photo.id}>
-          {fields.map(([term, value], i) => (
+          {filled.map(([term, value], i) => (
             <div key={term} className={styles.field}>
               <dt className={styles.term}>{term}</dt>
               <dd className={styles.mask}>

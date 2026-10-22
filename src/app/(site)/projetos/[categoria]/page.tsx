@@ -5,8 +5,9 @@ import { ProjectsPage } from "@/components/projects-page/ProjectsPage";
 
 type Props = { params: Promise<{ categoria: string }> };
 
-// Uma página pronta para cada categoria; endereços que não existem dão 404.
-export const dynamicParams = false;
+// Uma página pronta para cada categoria. Uma categoria criada depois no
+// painel ganha a sua na primeira visita; endereços que não existem dão 404.
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const { projectsPage } = await getSiteContent();

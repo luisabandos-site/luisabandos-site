@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { Photo } from "@/content/types";
 import { PHOTO_QUALITY } from "@/lib/quality";
+import { loaderFor } from "@/lib/sanity/image";
 import styles from "./PhotoImage.module.css";
 
 type Props = {
@@ -53,6 +54,7 @@ export function PhotoImage({ photo, sizes, preload, eager, fetchPriority, qualit
       <Image
         ref={imageRef}
         src={photo.src}
+        loader={loaderFor(photo)}
         alt={alt ?? photo.alt}
         fill
         sizes={sizes}
