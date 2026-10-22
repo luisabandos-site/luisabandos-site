@@ -8,6 +8,7 @@ import type { Photo } from "@/content/types";
 import { formatPhotoDate } from "@/lib/format";
 import { preloadPhoto } from "@/lib/preload";
 import { PhotoImage } from "../PhotoImage";
+import { usePageTransition } from "../transition/PageTransition";
 import { lightboxSizes } from "./sizes";
 import styles from "./Lightbox.module.css";
 
@@ -28,6 +29,7 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [direction, setDirection] = useState(0);
+  const transition = usePageTransition();
   const photo = photos[index];
   const many = photos.length > 1;
 
@@ -89,7 +91,15 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
     category
       ? [
           "Categoria",
-          <NextLink key={category.slug} href={`/projetos/${category.slug}`} className={styles.link} onClick={onClose}>
+          <NextLink
+            key={category.slug}
+            href={`/projetos/${category.slug}`}
+            className={styles.link}
+            onClick={(event) => {
+              transition(event, `/projetos/${category.slug}`, category.title);
+              onClose();
+            }}
+          >
             {category.title}
           </NextLink>,
         ]
@@ -172,7 +182,7 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
         <dl className={styles.caption} key={photo.id}>
           {fields.map(([term, value], i) => (
             <div key={term} className={styles.field}>
-              <dt className={`label ${styles.term}`}>{term}</dt>
+              <dt className={styles.term}>{term}</dt>
               <dd className={styles.mask}>
                 <motion.span
                   className={styles.value}

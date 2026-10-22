@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import NextLink from "next/link";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import type { SiteContent } from "@/content/types";
 import { preloadPhoto } from "@/lib/preload";
 import { PhotoImage } from "./PhotoImage";
+import { usePageTransition } from "./transition/PageTransition";
 import styles from "./Services.module.css";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -24,6 +26,7 @@ export function Services({ services }: { services: SiteContent["services"] }) {
   const listRef = useRef<HTMLUListElement>(null);
   const followX = useSpring(0, { stiffness: 140, damping: 22, mass: 0.6 });
   const activeRef = useRef(active);
+  const transition = usePageTransition();
 
   useEffect(() => {
     activeRef.current = active;
@@ -110,9 +113,10 @@ export function Services({ services }: { services: SiteContent["services"] }) {
           const isActive = active === i;
           return (
             <li key={service.slug} data-row className={styles.item} data-active={isActive || undefined}>
-              <a
+              <NextLink
                 href={service.href}
                 className={styles.row}
+                onClick={(event) => transition(event, service.href, service.title)}
                 onMouseEnter={(event) => {
                   if (touch) return;
                   setEdge(edgeOf(event));
@@ -174,7 +178,7 @@ export function Services({ services }: { services: SiteContent["services"] }) {
                     </motion.span>
                   )}
                 </AnimatePresence>
-              </a>
+              </NextLink>
             </li>
           );
         })}

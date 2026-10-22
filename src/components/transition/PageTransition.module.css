@@ -1,0 +1,42 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px var(--margin) 32px;
+  background: var(--black);
+  color: var(--white);
+  pointer-events: all;
+}
+
+.brand {
+  color: var(--muted-dark);
+}
+
+.mask {
+  display: block;
+  overflow: hidden;
+}
+
+.title {
+  display: block;
+  margin-left: -0.027em;
+  font-size: clamp(64px, 11.46vw, 260px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  /* Espaço para a perna do "j" não ser cortada pela máscara. */
+  padding-bottom: 0.12em;
+}
+
+@media (max-width: 767px) {
+  .root {
+    padding: 20px var(--margin) 24px;
+  }
+
+  .title {
+    font-size: 18vw;
+  }
+}

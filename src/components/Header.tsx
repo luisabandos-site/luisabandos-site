@@ -5,6 +5,7 @@ import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { useLenis } from "lenis/react";
 import type { Link } from "@/content/types";
+import { usePageTransition } from "./transition/PageTransition";
 import styles from "./Header.module.css";
 
 /** "/projetos/eventos" está dentro de "Projetos"; a home só em "/". */
@@ -21,9 +22,15 @@ export function Header({ brand, nav }: { brand: string; nav: Link[] }) {
   const pathname = usePathname();
   const lenis = useLenis();
 
-  // Clicar na página em que já está volta suavemente para o topo.
-  const onNavigate = (href: string) => (event: React.MouseEvent) => {
-    if (href !== pathname) return;
+  const transition = usePageTransition();
+
+  // Outra página: abre com a cortina. A página em que já está: volta
+  // suavemente para o topo.
+  const onNavigate = (href: string, label: string) => (event: React.MouseEvent) => {
+    if (href !== pathname) {
+      transition(event, href, label);
+      return;
+    }
     event.preventDefault();
     if (lenis) lenis.scrollTo(0, { duration: 1.6 });
     else window.scrollTo({ top: 0, behavior: "smooth" });
@@ -66,7 +73,7 @@ export function Header({ brand, nav }: { brand: string; nav: Link[] }) {
 
   return (
     <header className={styles.root} data-on={theme} data-hidden={hidden || undefined}>
-      <NextLink href="/" className={styles.brand} onClick={onNavigate("/")}>
+      <NextLink href="/" className={styles.brand} onClick={onNavigate("/", nav[0]?.label ?? brand)}>
         {brand}
       </NextLink>
       <nav aria-label="Principal">
@@ -77,7 +84,7 @@ export function Header({ brand, nav }: { brand: string; nav: Link[] }) {
                 href={item.href}
                 className={styles.link}
                 aria-current={isActive(item.href, pathname) ? "page" : undefined}
-                onClick={onNavigate(item.href)}
+                onClick={onNavigate(item.href, item.label)}
               >
                 {item.label}
               </NextLink>
