@@ -4,6 +4,7 @@ import { heroSizes, portraitSizes } from "@/lib/sizes";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { LightboxProvider } from "@/components/lightbox/LightboxProvider";
 import { IntroProvider } from "@/components/intro/IntroProvider";
+import { PageTransition } from "@/components/transition/PageTransition";
 import { INTRO_SEEN_KEY } from "@/components/intro/constants";
 import { archivo, archivoItalic, geist } from "./fonts";
 import "./globals.css";
@@ -54,9 +55,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <SmoothScroll>
-          <IntroProvider brand={brand} critical={critical}>
-            <LightboxProvider>{children}</LightboxProvider>
-          </IntroProvider>
+          <PageTransition brand={brand}>
+            <IntroProvider brand={brand} critical={critical}>
+              <LightboxProvider>{children}</LightboxProvider>
+            </IntroProvider>
+          </PageTransition>
         </SmoothScroll>
       </body>
     </html>
