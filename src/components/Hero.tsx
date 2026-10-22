@@ -5,15 +5,15 @@ import { motion, useScroll, useTransform } from "motion/react";
 import type { SiteContent } from "@/content/types";
 import { FitText } from "./FitText";
 import { useIntro } from "./intro/IntroProvider";
-import { PhotoImage } from "./PhotoImage";
+import { HeroSlides } from "./HeroSlides";
 import styles from "./Hero.module.css";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /**
  * Hero fixo (sticky): a seção branca "Sobre mim" sobe por cima dele. Enquanto
- * é coberto, a foto dá um leve zoom e escurece. As animações de entrada
- * esperam a intro terminar.
+ * é coberto, a foto dá um leve zoom e escurece. As fotos trocam sozinhas em
+ * loop, e as animações de entrada esperam a intro terminar.
  */
 export function Hero({ hero }: { hero: SiteContent["hero"] }) {
   const [viewport, setViewport] = useState(900);
@@ -37,7 +37,7 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
     <section className={styles.root} data-theme="dark" id="top" aria-label="Início">
       <motion.div
         className={styles.media}
-        style={{ scale, backgroundColor: hero.image.color }}
+        style={{ scale, backgroundColor: hero.images[0]?.color }}
         initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
         animate={{ clipPath: ready ? "inset(0% 0% 0% 0%)" : "inset(100% 0% 0% 0%)" }}
         transition={{ duration: 1.3, ease, delay: 0.1 }}
@@ -48,7 +48,7 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
           animate={{ scale: ready ? 1 : 1.2 }}
           transition={{ duration: 2, ease, delay: 0.1 }}
         >
-          <PhotoImage photo={hero.image} sizes="100vw" preload eager onLoad={markHeroLoaded} />
+          <HeroSlides images={hero.images} ready={ready} onFirstLoad={markHeroLoaded} />
         </motion.div>
       </motion.div>
       <div className={styles.gradient} aria-hidden="true" />

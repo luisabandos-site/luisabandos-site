@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: seo.description,
       type: "website",
       locale: "pt_BR",
-      images: [{ url: hero.image.src, width: hero.image.width, height: hero.image.height }],
+      images: hero.images.slice(0, 1).map((image) => ({ url: image.src, width: image.width, height: image.height })),
     },
     twitter: { card: "summary_large_image" },
   };

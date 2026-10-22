@@ -25,6 +25,11 @@ export type Photo = {
   color?: string;
   /** Miniatura borrada (data URL) mostrada enquanto a foto carrega. */
   blur?: string;
+  /**
+   * Ponto da foto que fica sempre à vista quando ela é cortada para caber na
+   * tela (CSS object-position, ex.: "50% 80%"). No Sanity, vem do hotspot.
+   */
+  focus?: string;
 };
 
 export type Link = {
@@ -51,7 +56,8 @@ export type SiteContent = {
   nav: Link[];
   hero: {
     name: string;
-    image: Photo;
+    /** Fotos do topo, que trocam sozinhas em loop (a primeira abre o site). */
+    images: Photo[];
     roles: string[];
     socials: Link[];
   };

@@ -12,11 +12,13 @@ nenhum componente precisa mudar.
 | --- | --- | --- |
 | `photo` | imagem, `title` (nome), `location` (lugar), `date`, `alt` | Galeria, retrato, hover dos serviços, tela cheia |
 | `service` | `title`, `slug`, `tags[]`, `preview` (2 fotos), `href` | "O que eu faço" |
-| `home` (singleton) | hero (nome, foto, funções, redes), sobre (manifesto, bio, cidade, retrato), projetos (lista ordenada de fotos), serviços (lista), contato, rodapé | Página inicial |
+| `home` (singleton) | hero (nome, fotos que trocam em loop, funções, redes), sobre (manifesto, bio, cidade, retrato), projetos (lista ordenada de fotos), serviços (lista), contato, rodapé | Página inicial |
 
 No Sanity, a imagem já traz largura, altura, cor média e miniatura borrada
 (`asset->metadata.dimensions`, `asset->metadata.palette.dominant.background` e
 `asset->metadata.lqip`), que viram `width`, `height`, `color` e `blur` do tipo `Photo`.
+O hotspot da imagem (`hotspot.x`/`hotspot.y`) vira `focus` (ex.: `"54% 90%"`), o ponto
+que fica à vista quando a foto é cortada para caber na tela.
 
 ## Passos
 

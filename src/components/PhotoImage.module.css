@@ -10,13 +10,14 @@
   content: "";
   position: absolute;
   inset: -8%;
-  background: var(--blur) center / cover no-repeat;
+  background: var(--blur) var(--focus, center) / cover no-repeat;
   filter: blur(28px) saturate(1.2);
   transition: opacity 0.6s 0.5s;
 }
 
 .image {
   object-fit: cover;
+  object-position: var(--focus, center);
   opacity: 0;
   transform: scale(1.04);
   transition:

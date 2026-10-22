@@ -21,7 +21,7 @@ export const site: SiteContent = {
   ],
   hero: {
     name: "Luísa Bandos",
-    image: photos.heroShow,
+    images: [photos.heroShow, photos.showVentilador, photos.retratoAvenida, photos.editorialAmarelo],
     roles: [
       "Fotógrafa,",
       "Diretora de fotografia,",

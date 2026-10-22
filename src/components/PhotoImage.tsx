@@ -32,6 +32,7 @@ export function PhotoImage({ photo, sizes, preload, eager, alt, onLoad }: Props)
         {
           backgroundColor: photo.color,
           "--blur": photo.blur ? `url("${photo.blur}")` : undefined,
+          "--focus": photo.focus,
         } as React.CSSProperties
       }
     >
