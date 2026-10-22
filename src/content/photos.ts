@@ -1,11 +1,38 @@
 import type { Photo } from "./types";
+import heroShowFile from "./images/hero-show.jpg";
+import showVentiladorFile from "./images/show-ventilador.jpg";
+import retratoAvenidaFile from "./images/retrato-avenida.jpg";
+import editorialAmareloFile from "./images/editorial-amarelo.jpg";
+import retratoTorreFile from "./images/retrato-torre.jpg";
+import pistaCheiaFile from "./images/pista-cheia.jpg";
+import stillRelogioFile from "./images/still-relogio.jpg";
+import retratoVermelhoFile from "./images/retrato-vermelho.jpg";
+import stillBandeiraFile from "./images/still-bandeira.jpg";
+import djFisheyeFile from "./images/dj-fisheye.jpg";
+import djVermelhoFile from "./images/dj-vermelho.jpg";
+import djVerdeFile from "./images/dj-verde.jpg";
+import luisaRetratoFile from "./images/luisa-retrato.jpg";
+import festaSereiaFile from "./images/festa-sereia.jpg";
+import showDancaFile from "./images/show-danca.jpg";
+import makingOfBastidorFile from "./images/making-of-bastidor.jpg";
+import stillEscritorioFile from "./images/still-escritorio.jpg";
+import retratoFumacaFile from "./images/retrato-fumaca.jpg";
+import retratoCoroaFile from "./images/retrato-coroa.jpg";
+import cidadeGritaFosterFile from "./images/cidade-grita-foster.jpg";
+import cidadeGritaCartazFile from "./images/cidade-grita-cartaz.jpg";
+import setCameraFile from "./images/set-camera.jpg";
+import setLuzVerdeFile from "./images/set-luz-verde.jpg";
 
 /**
  * Biblioteca de fotos.
  *
- * Arquivos em `public/images/`: versões em alta (lado maior com 3000 px, sRGB)
- * geradas a partir dos originais da Luísa. O Next.js cria sozinho as versões
- * leves (AVIF/WebP) para cada tela.
+ * Arquivos em `src/content/images/`: versões em alta (lado maior com 3000 px,
+ * sRGB) geradas a partir dos originais da Luísa. O Next.js cria sozinho as
+ * versões leves (AVIF/WebP) para cada tela.
+ *
+ * As fotos são importadas (não ficam em `public/`) para o endereço de cada uma
+ * levar uma impressão digital do arquivo. Assim o navegador pode guardá-las
+ * por anos, e quando uma foto é trocada o endereço muda sozinho.
  *
  * As datas vêm dos dados da câmera. Os nomes e lugares ainda são PROVISÓRIOS:
  * troque pelos reais.
@@ -15,9 +42,9 @@ const photo = (p: Photo): Photo => p;
 export const photos = {
   heroShow: photo({
     id: "hero-show",
-    src: "/images/hero-show.jpg",
-    width: 3000,
-    height: 2000,
+    src: heroShowFile.src,
+    width: heroShowFile.width,
+    height: heroShowFile.height,
     alt: "Artista de boné e camiseta branca com os braços erguidos no palco, luz azul ao fundo",
     title: "Show ao vivo",
     location: "São Paulo, SP",
@@ -28,9 +55,9 @@ export const photos = {
   }),
   showVentilador: photo({
     id: "show-ventilador",
-    src: "/images/show-ventilador.jpg",
-    width: 3000,
-    height: 2000,
+    src: showVentiladorFile.src,
+    width: showVentiladorFile.width,
+    height: showVentiladorFile.height,
     alt: "Cantora de cabelo ruivo e roupa dourada no palco, ao lado de um ventilador, com fumaça e luzes ao fundo",
     title: "Palco e fumaça",
     location: "São Paulo, SP",
@@ -41,9 +68,9 @@ export const photos = {
   }),
   retratoAvenida: photo({
     id: "retrato-avenida",
-    src: "/images/retrato-avenida.jpg",
-    width: 3000,
-    height: 1999,
+    src: retratoAvenidaFile.src,
+    width: retratoAvenidaFile.width,
+    height: retratoAvenidaFile.height,
     alt: "Homem de camisa escura sentado num muro à beira de uma avenida, ao entardecer",
     title: "Retrato na avenida",
     location: "São Carlos, SP",
@@ -54,9 +81,9 @@ export const photos = {
   }),
   editorialAmarelo: photo({
     id: "editorial-amarelo",
-    src: "/images/editorial-amarelo.jpg",
-    width: 1774,
-    height: 2661,
+    src: editorialAmareloFile.src,
+    width: editorialAmareloFile.width,
+    height: editorialAmareloFile.height,
     alt: "Mulher deitada de costas sobre fundo amarelo, de meia-calça azul",
     title: "Editorial amarelo",
     location: "Estúdio",
@@ -67,9 +94,9 @@ export const photos = {
   }),
   retratoTorre: photo({
     id: "retrato-torre",
-    src: "/images/retrato-torre.jpg",
-    width: 2000,
-    height: 3000,
+    src: retratoTorreFile.src,
+    width: retratoTorreFile.width,
+    height: retratoTorreFile.height,
     alt: "Retrato de mulher de cabelo cacheado ao pôr do sol, com uma torre de energia ao fundo",
     title: "Retrato ao entardecer",
     location: "São Carlos, SP",
@@ -79,9 +106,9 @@ export const photos = {
   }),
   pistaCheia: photo({
     id: "pista-cheia",
-    src: "/images/pista-cheia.jpg",
-    width: 3000,
-    height: 2000,
+    src: pistaCheiaFile.src,
+    width: pistaCheiaFile.width,
+    height: pistaCheiaFile.height,
     alt: "Público em volta da cabine do DJ numa festa, vista com lente olho de peixe",
     title: "Pista cheia",
     location: "São Carlos, SP",
@@ -91,9 +118,9 @@ export const photos = {
   }),
   stillRelogio: photo({
     id: "still-relogio",
-    src: "/images/still-relogio.jpg",
-    width: 2000,
-    height: 3000,
+    src: stillRelogioFile.src,
+    width: stillRelogioFile.width,
+    height: stillRelogioFile.height,
     alt: "Relógio azul sobre cetim rosa e manta verde, à beira de um lago",
     title: "Still — o tempo",
     location: "Brotas, SP",
@@ -103,9 +130,9 @@ export const photos = {
   }),
   retratoVermelho: photo({
     id: "retrato-vermelho",
-    src: "/images/retrato-vermelho.jpg",
-    width: 2000,
-    height: 3000,
+    src: retratoVermelhoFile.src,
+    width: retratoVermelhoFile.width,
+    height: retratoVermelhoFile.height,
     alt: "Retrato de mulher com gola plissada sob luz vermelha",
     title: "Retrato em vermelho",
     location: "São Paulo, SP",
@@ -115,9 +142,9 @@ export const photos = {
   }),
   stillBandeira: photo({
     id: "still-bandeira",
-    src: "/images/still-bandeira.jpg",
-    width: 2000,
-    height: 3000,
+    src: stillBandeiraFile.src,
+    width: stillBandeiraFile.width,
+    height: stillBandeiraFile.height,
     alt: "Mulher envolta na bandeira do Brasil segurando uma arma, cena de filme",
     title: "Still de set",
     location: "Ribeirão Preto, SP",
@@ -127,9 +154,9 @@ export const photos = {
   }),
   djFisheye: photo({
     id: "dj-fisheye",
-    src: "/images/dj-fisheye.jpg",
-    width: 2000,
-    height: 3000,
+    src: djFisheyeFile.src,
+    width: djFisheyeFile.width,
+    height: djFisheyeFile.height,
     alt: "DJ mixando, vista de cima com lente olho de peixe e luzes em movimento",
     title: "Na cabine",
     location: "São Carlos, SP",
@@ -139,9 +166,9 @@ export const photos = {
   }),
   djVermelho: photo({
     id: "dj-vermelho",
-    src: "/images/dj-vermelho.jpg",
-    width: 3000,
-    height: 2000,
+    src: djVermelhoFile.src,
+    width: djVermelhoFile.width,
+    height: djVermelhoFile.height,
     alt: "DJ de fone de ouvido iluminada por luz vermelha e amarela",
     title: "Set noturno",
     location: "São Carlos, SP",
@@ -151,9 +178,9 @@ export const photos = {
   }),
   djVerde: photo({
     id: "dj-verde",
-    src: "/images/dj-verde.jpg",
-    width: 2000,
-    height: 3000,
+    src: djVerdeFile.src,
+    width: djVerdeFile.width,
+    height: djVerdeFile.height,
     alt: "DJ loiro de olhos fechados tocando, com rastros de luz verde",
     title: "Festa de graça na rua",
     location: "São Carlos, SP",
@@ -163,9 +190,9 @@ export const photos = {
   }),
   luisaRetrato: photo({
     id: "luisa-retrato",
-    src: "/images/luisa-retrato.jpg",
-    width: 414,
-    height: 480,
+    src: luisaRetratoFile.src,
+    width: luisaRetratoFile.width,
+    height: luisaRetratoFile.height,
     alt: "Luísa Bandos segurando a câmera, sob luz roxa",
     title: "Luísa Bandos",
     location: "São Carlos, SP",
@@ -175,9 +202,9 @@ export const photos = {
   }),
   festaSereia: photo({
     id: "festa-sereia",
-    src: "/images/festa-sereia.jpg",
-    width: 2000,
-    height: 3000,
+    src: festaSereiaFile.src,
+    width: festaSereiaFile.width,
+    height: festaSereiaFile.height,
     alt: "Mulher com maquiagem de sereia sorrindo numa festa",
     title: "Noite de festa",
     location: "São Carlos, SP",
@@ -187,9 +214,9 @@ export const photos = {
   }),
   showDanca: photo({
     id: "show-danca",
-    src: "/images/show-danca.jpg",
-    width: 2000,
-    height: 3000,
+    src: showDancaFile.src,
+    width: showDancaFile.width,
+    height: showDancaFile.height,
     alt: "Cantora com figurino dourado de braços erguidos sob refletores",
     title: "Show — abertura",
     location: "São Paulo, SP",
@@ -199,9 +226,9 @@ export const photos = {
   }),
   makingOfBastidor: photo({
     id: "making-of-bastidor",
-    src: "/images/making-of-bastidor.jpg",
-    width: 2000,
-    height: 3000,
+    src: makingOfBastidorFile.src,
+    width: makingOfBastidorFile.width,
+    height: makingOfBastidorFile.height,
     alt: "Bastidor de set com atriz de gola de tule e equipe ao redor",
     title: "Bastidor de set",
     location: "São Paulo, SP",
@@ -211,9 +238,9 @@ export const photos = {
   }),
   stillEscritorio: photo({
     id: "still-escritorio",
-    src: "/images/still-escritorio.jpg",
-    width: 2000,
-    height: 3000,
+    src: stillEscritorioFile.src,
+    width: stillEscritorioFile.width,
+    height: stillEscritorioFile.height,
     alt: "Homem de costas diante de um computador antigo e um relógio de parede",
     title: "Still — escritório",
     location: "São Carlos, SP",
@@ -223,9 +250,9 @@ export const photos = {
   }),
   retratoFumaca: photo({
     id: "retrato-fumaca",
-    src: "/images/retrato-fumaca.jpg",
-    width: 2000,
-    height: 3000,
+    src: retratoFumacaFile.src,
+    width: retratoFumacaFile.width,
+    height: retratoFumacaFile.height,
     alt: "Retrato noturno de mulher de cabelo cacheado sob luz vermelha",
     title: "Retrato noturno",
     location: "São Carlos, SP",
@@ -235,9 +262,9 @@ export const photos = {
   }),
   retratoCoroa: photo({
     id: "retrato-coroa",
-    src: "/images/retrato-coroa.jpg",
-    width: 2000,
-    height: 3000,
+    src: retratoCoroaFile.src,
+    width: retratoCoroaFile.width,
+    height: retratoCoroaFile.height,
     alt: "Retrato de rapaz com uma coroa na cabeça, fundo cinza",
     title: "Retrato com coroa",
     location: "São Carlos, SP",
@@ -247,9 +274,9 @@ export const photos = {
   }),
   cidadeGritaFoster: photo({
     id: "cidade-grita-foster",
-    src: "/images/cidade-grita-foster.jpg",
-    width: 2121,
-    height: 3000,
+    src: cidadeGritaFosterFile.src,
+    width: cidadeGritaFosterFile.width,
+    height: cidadeGritaFosterFile.height,
     alt: "Fachada de casarão com pichação escrita Mansão Foster, em preto e branco",
     title: "A cidade grita — Mansão Foster",
     location: "São Carlos, SP",
@@ -259,9 +286,9 @@ export const photos = {
   }),
   cidadeGritaCartaz: photo({
     id: "cidade-grita-cartaz",
-    src: "/images/cidade-grita-cartaz.jpg",
-    width: 3000,
-    height: 2000,
+    src: cidadeGritaCartazFile.src,
+    width: cidadeGritaCartazFile.width,
+    height: cidadeGritaCartazFile.height,
     alt: "Cartaz rasgado sobre parede vermelha com frase escrita à mão",
     title: "A cidade grita — cartaz",
     location: "São Carlos, SP",
@@ -271,9 +298,9 @@ export const photos = {
   }),
   setCamera: photo({
     id: "set-camera",
-    src: "/images/set-camera.jpg",
-    width: 3000,
-    height: 2000,
+    src: setCameraFile.src,
+    width: setCameraFile.width,
+    height: setCameraFile.height,
     alt: "Equipe de filmagem num apartamento, com câmera e luz montadas",
     title: "Set de filmagem",
     location: "São Paulo, SP",
@@ -283,9 +310,9 @@ export const photos = {
   }),
   setLuzVerde: photo({
     id: "set-luz-verde",
-    src: "/images/set-luz-verde.jpg",
-    width: 2000,
-    height: 3000,
+    src: setLuzVerdeFile.src,
+    width: setLuzVerdeFile.width,
+    height: setLuzVerdeFile.height,
     alt: "Câmera de cinema sob luz verde durante uma filmagem",
     title: "Câmera em cena",
     location: "São Paulo, SP",

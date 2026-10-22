@@ -18,7 +18,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function Hero({ hero }: { hero: SiteContent["hero"] }) {
   const [viewport, setViewport] = useState(900);
   const { scrollY } = useScroll();
-  const { ready, markHeroLoaded } = useIntro();
+  const { ready } = useIntro();
 
   useEffect(() => {
     const update = () => setViewport(window.innerHeight);
@@ -48,7 +48,7 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
           animate={{ scale: ready ? 1 : 1.2 }}
           transition={{ duration: 2, ease, delay: 0.1 }}
         >
-          <HeroSlides images={hero.images} ready={ready} onFirstLoad={markHeroLoaded} />
+          <HeroSlides images={hero.images} ready={ready} />
         </motion.div>
       </motion.div>
       <div className={styles.gradient} aria-hidden="true" />

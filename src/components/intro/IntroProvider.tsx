@@ -1,24 +1,24 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createContext, useContext, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLenis } from "lenis/react";
+import type { Photo } from "@/content/types";
+import { preloadPhoto } from "@/lib/preload";
 import { INTRO_SEEN_KEY } from "./constants";
 import styles from "./Intro.module.css";
 
 /** Tempo mínimo da intro, para o contador não piscar em conexões rápidas. */
 const MIN_MS = 800;
-/** Tempo máximo: mesmo se a foto do topo não chegou, o site abre. */
-const MAX_MS = 3000;
+/** Tempo máximo: numa conexão muito lenta, o site abre mesmo assim. */
+const MAX_MS = 4000;
 
 type IntroContextValue = {
   /** true quando a cortina começa a subir; o Hero anima a partir daí. */
   ready: boolean;
-  /** O Hero avisa quando a foto dele terminou de carregar. */
-  markHeroLoaded: () => void;
 };
 
-const IntroContext = createContext<IntroContextValue>({ ready: true, markHeroLoaded: () => {} });
+const IntroContext = createContext<IntroContextValue>({ ready: true });
 
 export function useIntro() {
   return useContext(IntroContext);
@@ -35,28 +35,38 @@ function useSkipped() {
   );
 }
 
+type Props = {
+  brand: string;
+  /** Fotos que a intro baixa antes de abrir o site, com o `sizes` de cada uma. */
+  critical: { photo: Photo; sizes: string }[];
+  children: React.ReactNode;
+};
+
 /**
- * Intro curtinha: uma cortina preta com um contador 000 → 100 enquanto as
- * fontes e a foto do topo carregam. Quando tudo está pronto, ela sobe e o
- * Hero se revela já com a foto nítida.
+ * Intro curtinha que pré-carrega de verdade: uma cortina preta com um
+ * contador 000 → 100 que mostra o progresso real das fontes e das fotos
+ * críticas (o topo inteiro e o retrato). Quando tudo chegou, ela sobe e o
+ * Hero se revela já nítido. O resto da página baixa em segundo plano depois.
  */
-export function IntroProvider({ brand, children }: { brand: string; children: React.ReactNode }) {
+export function IntroProvider({ brand, critical, children }: Props) {
   const skipped = useSkipped();
   const [finished, setFinished] = useState(false);
   const ready = skipped || finished;
-  const heroLoaded = useRef(false);
+  const criticalRef = useRef(critical);
   const countRef = useRef<HTMLSpanElement>(null);
   const lenis = useLenis();
-
-  const markHeroLoaded = useCallback(() => {
-    heroLoaded.current = true;
-  }, []);
 
   useEffect(() => {
     if (skipped) return;
 
-    let fontsReady = false;
-    document.fonts.ready.then(() => (fontsReady = true));
+    const items = criticalRef.current;
+    const total = items.length + 1;
+    let loaded = 0;
+    const count = () => {
+      loaded++;
+    };
+    document.fonts.ready.then(count);
+    items.forEach(({ photo, sizes }) => preloadPhoto(photo, sizes).then(count));
 
     const start = performance.now();
     let last = start;
@@ -67,9 +77,9 @@ export function IntroProvider({ brand, children }: { brand: string; children: Re
       const elapsed = now - start;
       const step = now - last;
       last = now;
-      const done = (fontsReady && heroLoaded.current && elapsed >= MIN_MS) || elapsed >= MAX_MS;
-      // Enquanto carrega, o contador se aproxima de 90; quando termina, corre até 100.
-      const target = done ? 100 : 90 * (1 - Math.exp(-elapsed / 700));
+      const done = (loaded >= total && elapsed >= MIN_MS) || elapsed >= MAX_MS;
+      // O contador segue o progresso real (suavizado) e só chega a 100 no fim.
+      const target = done ? 100 : Math.min(99, (loaded / total) * 100);
       value += (target - value) * (1 - Math.exp(-step / (done ? 70 : 120)));
       if (done && value > 99.5) value = 100;
       if (countRef.current) countRef.current.textContent = String(Math.floor(value)).padStart(3, "0");
@@ -95,7 +105,7 @@ export function IntroProvider({ brand, children }: { brand: string; children: Re
   }, [lenis, ready]);
 
   return (
-    <IntroContext.Provider value={{ ready, markHeroLoaded }}>
+    <IntroContext.Provider value={{ ready }}>
       {children}
       <AnimatePresence>
         {!ready && (

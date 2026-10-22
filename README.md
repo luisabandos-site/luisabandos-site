@@ -19,7 +19,7 @@ Por enquanto o conteúdo fica em arquivos simples:
 | --- | --- |
 | Textos da home (hero, sobre, serviços, contato, rodapé) | `src/content/site.ts` |
 | Fotos (arquivo, nome, lugar, data, texto alternativo) | `src/content/photos.ts` |
-| Arquivos das imagens | `public/images/` |
+| Arquivos das imagens | `src/content/images/` |
 
 Dá para editar direto pelo GitHub (botão de lápis no arquivo). Ao salvar na branch principal, a Vercel publica sozinha.
 

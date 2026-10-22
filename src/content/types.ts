@@ -9,7 +9,7 @@
 
 export type Photo = {
   id: string;
-  /** Caminho local (/images/...) ou URL do CMS. */
+  /** Endereço da foto: arquivo importado de `src/content/images` ou URL do CMS. */
   src: string;
   width: number;
   height: number;

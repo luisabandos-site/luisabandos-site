@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { Photo } from "@/content/types";
 import styles from "./PhotoImage.module.css";
@@ -10,24 +10,35 @@ type Props = {
   sizes: string;
   /** Carrega antes de tudo (use só no que aparece logo de cara). */
   preload?: boolean;
-  /** Carrega na hora, com prioridade, sem esperar chegar perto da tela. */
+  /** Carrega na hora, sem esperar chegar perto da tela. */
   eager?: boolean;
+  /** Prioridade do download em relação às outras fotos. */
+  fetchPriority?: "high" | "low" | "auto";
   alt?: string;
   onLoad?: () => void;
 };
 
 /**
- * Foto com prévia borrada: enquanto a versão final carrega, aparece uma
- * miniatura desfocada da própria foto; quando ela chega, entra com um fade.
- * Ocupa todo o container (que precisa ter `position: relative`).
+ * Foto com prévia borrada por baixo. A foto aparece direto, sem esperar o
+ * JavaScript: se já está guardada no navegador, surge na hora. Só a foto
+ * prioritária que ainda está chegando quando a página fica pronta entra com
+ * um fade curto. Ocupa todo o container (que precisa ter `position: relative`).
  */
-export function PhotoImage({ photo, sizes, preload, eager, alt, onLoad }: Props) {
-  const [loaded, setLoaded] = useState(false);
+export function PhotoImage({ photo, sizes, preload, eager, fetchPriority, alt, onLoad }: Props) {
+  const rootRef = useRef<HTMLSpanElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  // Fade só para foto prioritária que ainda está chegando. As de mais abaixo
+  // (lazy) já vêm do pré-carregamento e aparecem na hora quando a tela chega lá.
+  useEffect(() => {
+    const img = imageRef.current;
+    if (img && !img.complete && img.loading !== "lazy") img.dataset.pending = "";
+  }, []);
 
   return (
     <span
+      ref={rootRef}
       className={styles.root}
-      data-loaded={loaded || undefined}
       style={
         {
           backgroundColor: photo.color,
@@ -37,6 +48,7 @@ export function PhotoImage({ photo, sizes, preload, eager, alt, onLoad }: Props)
       }
     >
       <Image
+        ref={imageRef}
         src={photo.src}
         alt={alt ?? photo.alt}
         fill
@@ -44,11 +56,12 @@ export function PhotoImage({ photo, sizes, preload, eager, alt, onLoad }: Props)
         quality={85}
         preload={preload}
         loading={eager ? "eager" : undefined}
-        fetchPriority={eager ? "high" : undefined}
+        fetchPriority={fetchPriority ?? (eager ? "high" : undefined)}
         draggable={false}
-        className={`${styles.image} fade-img`}
-        onLoad={() => {
-          setLoaded(true);
+        className={styles.image}
+        onLoad={(event) => {
+          delete event.currentTarget.dataset.pending;
+          if (rootRef.current) rootRef.current.dataset.loaded = "";
           onLoad?.();
         }}
       />

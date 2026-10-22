@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { getSiteContent } from "@/lib/content";
+import { heroSizes, portraitSizes } from "@/lib/sizes";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { LightboxProvider } from "@/components/lightbox/LightboxProvider";
 import { IntroProvider } from "@/components/intro/IntroProvider";
@@ -32,11 +33,16 @@ export const viewport: Viewport = {
 // não volta a aparecer (nem por um instante).
 const introScript = `try{if(sessionStorage.getItem("${INTRO_SEEN_KEY}"))document.documentElement.dataset.intro="skip"}catch(e){}`;
 
-// Sem JavaScript: mostra as fotos direto e esconde a intro.
-const noScriptStyle = `<style>.fade-img{opacity:1!important;transform:none!important}[data-intro-root]{display:none!important}</style>`;
+// Sem JavaScript: esconde a intro.
+const noScriptStyle = `<style>[data-intro-root]{display:none!important}</style>`;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { brand } = await getSiteContent();
+  const { brand, hero, about } = await getSiteContent();
+  // O que a intro baixa antes de abrir: todas as fotos do topo e o retrato.
+  const critical = [
+    ...hero.images.map((photo) => ({ photo, sizes: heroSizes(photo) })),
+    { photo: about.portrait, sizes: portraitSizes },
+  ];
 
   return (
     <html lang="pt-BR" className={`${archivo.variable} ${geist.variable}`} suppressHydrationWarning>
@@ -46,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <SmoothScroll>
-          <IntroProvider brand={brand}>
+          <IntroProvider brand={brand} critical={critical}>
             <LightboxProvider>{children}</LightboxProvider>
           </IntroProvider>
         </SmoothScroll>

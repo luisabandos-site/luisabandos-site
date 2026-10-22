@@ -5,33 +5,29 @@
   overflow: hidden;
 }
 
-/* Miniatura da própria foto, ampliada e desfocada. */
+/* Miniatura da própria foto, ampliada e desfocada, por baixo da foto. */
 .root::before {
   content: "";
   position: absolute;
   inset: -8%;
   background: var(--blur) var(--focus, center) / cover no-repeat;
   filter: blur(28px) saturate(1.2);
-  transition: opacity 0.6s 0.5s;
+}
+
+/* Depois que a foto chega, a prévia não é mais necessária. */
+.root[data-loaded]::before {
+  display: none;
 }
 
 .image {
   object-fit: cover;
   object-position: var(--focus, center);
-  opacity: 0;
-  transform: scale(1.04);
-  transition:
-    opacity 0.9s var(--ease-out),
-    transform 1.6s var(--ease-out);
+  transition: opacity 0.6s var(--ease-out);
   user-select: none;
   -webkit-user-drag: none;
 }
 
-.root[data-loaded] .image {
-  opacity: 1;
-  transform: none;
-}
-
-.root[data-loaded]::before {
+/* Só para a foto que ainda estava chegando quando a página ficou pronta. */
+.image[data-pending] {
   opacity: 0;
 }
