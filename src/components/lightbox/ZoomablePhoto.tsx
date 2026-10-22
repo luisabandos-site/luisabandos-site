@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import type { Photo } from "@/content/types";
 import { preloadPhoto, queuePhoto } from "@/lib/preload";
+import { FULLSCREEN_QUALITY } from "@/lib/quality";
 import { PhotoImage } from "../PhotoImage";
 import { useLightbox } from "./LightboxProvider";
 import { lightboxSizes } from "./sizes";
@@ -42,8 +43,8 @@ export function ZoomablePhoto({ photo, group, sizes, preload, showCategory, clas
       style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
       onClick={() => open(photos, index, { showCategory })}
       // Ao passar o mouse (ou tocar), já começa a baixar a versão da tela cheia.
-      onPointerEnter={() => preloadPhoto(photo, lightboxSizes(photo))}
-      onPointerDown={() => preloadPhoto(photo, lightboxSizes(photo))}
+      onPointerEnter={() => preloadPhoto(photo, lightboxSizes(photo), "auto", FULLSCREEN_QUALITY)}
+      onPointerDown={() => preloadPhoto(photo, lightboxSizes(photo), "auto", FULLSCREEN_QUALITY)}
       data-cursor="Ver"
       aria-label={`Abrir foto em tela cheia: ${photo.title}`}
     >

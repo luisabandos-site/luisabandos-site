@@ -7,6 +7,7 @@ import { useLenis } from "lenis/react";
 import type { Photo } from "@/content/types";
 import { formatPhotoDate } from "@/lib/format";
 import { preloadPhoto } from "@/lib/preload";
+import { FULLSCREEN_QUALITY } from "@/lib/quality";
 import { PhotoImage } from "../PhotoImage";
 import { usePageTransition } from "../transition/PageTransition";
 import { lightboxSizes } from "./sizes";
@@ -81,7 +82,7 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
     if (!many) return;
     for (const step of [1, -1]) {
       const next = photos[(index + step + photos.length) % photos.length];
-      preloadPhoto(next, lightboxSizes(next));
+      preloadPhoto(next, lightboxSizes(next), "auto", FULLSCREEN_QUALITY);
     }
   }, [index, many, photos]);
 
@@ -172,7 +173,7 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
               animate={{ scale: 1 }}
               transition={{ duration: 1.1, ease }}
             >
-              <PhotoImage photo={photo} sizes={lightboxSizes(photo)} eager />
+              <PhotoImage photo={photo} sizes={lightboxSizes(photo)} quality={FULLSCREEN_QUALITY} eager />
             </motion.div>
           </motion.div>
         </AnimatePresence>
