@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import type { Photo } from "@/content/types";
+import { loaderFor } from "./sanity/image";
 
 const requested = new Map<string, Promise<void>>();
 
@@ -14,7 +15,14 @@ export function preloadPhoto(photo: Photo, sizes: string, priority: "high" | "lo
   const pending = requested.get(key);
   if (pending) return pending;
 
-  const { props } = getImageProps({ src: photo.src, alt: "", fill: true, sizes, quality: 85 });
+  const { props } = getImageProps({
+    src: photo.src,
+    loader: loaderFor(photo),
+    alt: "",
+    fill: true,
+    sizes,
+    quality: 85,
+  });
   const promise = new Promise<void>((resolve) => {
     const img = new window.Image();
     img.decoding = "async";

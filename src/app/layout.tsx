@@ -1,13 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { getSiteContent } from "@/lib/content";
-import { heroSizes, portraitSizes } from "@/lib/sizes";
-import { SmoothScroll } from "@/components/SmoothScroll";
-import { LightboxProvider } from "@/components/lightbox/LightboxProvider";
-import { IntroProvider } from "@/components/intro/IntroProvider";
-import { PageTransition } from "@/components/transition/PageTransition";
 import { INTRO_SEEN_KEY } from "@/components/intro/constants";
+import { ogImage } from "@/lib/sanity/image";
 import { archivo, archivoItalic, geist } from "./fonts";
-import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, hero } = await getSiteContent();
@@ -21,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: seo.description,
       type: "website",
       locale: "pt_BR",
-      images: hero.images.slice(0, 1).map((image) => ({ url: image.src, width: image.width, height: image.height })),
+      images: hero.images.slice(0, 1).map(ogImage),
     },
     twitter: { card: "summary_large_image" },
   };
@@ -39,29 +34,19 @@ const introScript = `try{var s=sessionStorage;if(s.getItem("${INTRO_SEEN_KEY}")|
 // Sem JavaScript: esconde a intro.
 const noScriptStyle = `<style>[data-intro-root]{display:none!important}</style>`;
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { brand, hero, about } = await getSiteContent();
-  // O que a intro baixa antes de abrir: todas as fotos do topo e o retrato.
-  const critical = [
-    ...hero.images.map((photo) => ({ photo, sizes: heroSizes(photo) })),
-    { photo: about.portrait, sizes: portraitSizes },
-  ];
-
+/**
+ * Base de todas as páginas: o site (pasta `(site)`) e o painel de edição
+ * (`/studio`). O que é só do site, como a intro, a rolagem suave e o estilo
+ * global, fica em `(site)/layout.tsx`, para não interferir no painel.
+ */
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${archivo.variable} ${archivoItalic.variable} ${geist.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: introScript }} />
         <noscript dangerouslySetInnerHTML={{ __html: noScriptStyle }} />
       </head>
-      <body>
-        <SmoothScroll>
-          <PageTransition brand={brand}>
-            <IntroProvider brand={brand} critical={critical}>
-              <LightboxProvider>{children}</LightboxProvider>
-            </IntroProvider>
-          </PageTransition>
-        </SmoothScroll>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

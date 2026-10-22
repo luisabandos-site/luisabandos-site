@@ -13,14 +13,14 @@ Site de fotografia da Luísa Bandos, feito em **Next.js** a partir do layout do 
 
 ## Onde editar textos e fotos
 
-Por enquanto o conteúdo fica em arquivos simples:
+No painel, em **`/studio`** (ex.: luisabandos-site.vercel.app/studio), com login do Sanity:
 
-| O quê | Arquivo |
-| --- | --- |
-| Textos da home, da página Projetos e da Sobre mim (inclusive a ordem das fotos em Projetos) | `src/content/site.ts` |
-| Fotos (arquivo, nome, lugar, data, categoria, texto alternativo) | `src/content/photos.ts` |
-| Categorias (nome, endereço e texto de cada filtro) | `src/content/categories.ts` |
-| Arquivos das imagens | `src/content/images/` |
+- **Fotos por categoria**: arraste várias fotos de uma vez, mude a ordem arrastando, clique numa foto para editar nome, lugar, data e marcar **Mostrar na home**.
+- **Home**, **Página Projetos**, **Página Sobre mim** e **Contato e informações gerais**: todos os textos.
+
+Depois de **Publicar**, o site atualiza sozinho em até 1 minuto. Detalhes técnicos em `docs/CMS.md`.
+
+Os arquivos em `src/content/` (textos, `photos.ts` e `images/`) são o conteúdo de antes do painel. Eles servem para o botão **Importar** do painel e como reserva para uma página que ainda não existe lá.
 
 ## Páginas
 
@@ -33,13 +33,9 @@ Por enquanto o conteúdo fica em arquivos simples:
 
 Na tela cheia, uma foto aberta pela home mostra a **categoria** (com link para Projetos filtrado), o lugar e a data. Nas outras páginas mostra o nome, o lugar e a data. Uma categoria sem fotos some dos filtros sozinha.
 
-Dá para editar direto pelo GitHub (botão de lápis no arquivo). Ao salvar na branch principal, a Vercel publica sozinha.
-
-**Padrão das fotos:** JPEG com o lado maior em 3000 px, qualidade 90, perfil de cor sRGB. O site gera sozinho as versões menores (AVIF/WebP) para cada tela. Cada foto em `photos.ts` também guarda a cor média (`color`) e uma miniatura borrada (`blur`), que aparecem enquanto a foto carrega.
+**Padrão das fotos:** JPEG com o lado maior entre 2500 e 3000 px, perfil de cor sRGB. O CDN do Sanity gera sozinho as versões menores (WebP) para cada tela, a cor média e a miniatura borrada que aparecem enquanto a foto carrega.
 
 Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn, o domínio, a bio e a trajetória do Sobre mim e as descrições das categorias (só a de Eventos veio do Figma).
-
-O próximo passo planejado é um painel de edição (CMS, ex.: Sanity), para a Luísa trocar fotos e textos sem mexer em código. O site já foi estruturado para isso; veja `docs/CMS.md`.
 
 ## Rodar no computador
 
