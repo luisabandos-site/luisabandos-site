@@ -35,7 +35,15 @@ Na tela cheia, uma foto aberta pela home mostra a **categoria** (com link para P
 
 **Padrão das fotos:** JPEG com o lado maior entre 2500 e 3000 px, perfil de cor sRGB. O CDN do Sanity gera sozinho as versões menores (WebP) para cada tela, a cor média e a miniatura borrada que aparecem enquanto a foto carrega.
 
-Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn, o domínio, a bio e a trajetória do Sobre mim e as descrições das categorias (só a de Eventos veio do Figma).
+Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn, a bio e a trajetória do Sobre mim e as descrições das categorias (só a de Eventos veio do Figma).
+
+## Google, compartilhamento e ícones
+
+- Endereço oficial: `https://luisabandos.com` (`SITE_URL` em `src/lib/seo.ts`). Todas as páginas apontam para ele (canonical), mesmo abertas pelo endereço da Vercel.
+- No painel, **Contato e informações gerais → Google e compartilhamento**: título e descrição do Google, a **imagem de compartilhamento** (WhatsApp, redes; vazio = primeira foto do topo) e o código de verificação do Google Search Console. A página de uma categoria usa a primeira foto dela na prévia.
+- `luisabandos.com/sitemap.xml` lista as páginas e as fotos (Google Imagens); `robots.txt` deixa o painel fora do Google.
+- Home e Sobre mim levam a ficha da Luísa para o Google (dados estruturados `Person`, com o Instagram e os outros perfis dos links do site).
+- Favicon e ícones: `src/app/favicon.ico`, `icon.svg`, `apple-icon.png` e `public/icon-*.png` (manifesto em `src/app/manifest.ts`). "LB" na fonte do nome (Archivo ExtraBold) sobre preto.
 
 ## Rodar no computador
 
@@ -51,6 +59,6 @@ npm run lint    # checa o código
 ## Publicar na Vercel
 
 1. Entrar na conta da Vercel da Luísa.
-2. **Add New → Project** e importar o repositório `lasanhaaa/luisabandos` do GitHub.
+2. **Add New → Project** e importar o repositório `luisabandos-site/luisabandos-site` do GitHub.
 3. A Vercel reconhece o Next.js sozinha; é só clicar em **Deploy**.
 4. Para usar um domínio próprio: **Settings → Domains** no projeto.

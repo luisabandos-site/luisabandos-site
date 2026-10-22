@@ -203,7 +203,8 @@ export const settings = defineType({
   icon: CogIcon,
   groups: [
     { name: "contact", title: "Contato", default: true },
-    { name: "general", title: "Menu, rodapé e Google" },
+    { name: "general", title: "Menu e rodapé" },
+    { name: "seo", title: "Google e compartilhamento" },
   ],
   fields: [
     defineField({
@@ -260,11 +261,38 @@ export const settings = defineType({
       name: "seo",
       title: "Google e compartilhamento",
       type: "object",
-      group: "general",
+      group: "seo",
       fields: [
-        defineField({ name: "title", title: "Título (aba do navegador e Google)", type: "string" }),
-        defineField({ name: "description", title: "Descrição", type: "text", rows: 3 }),
-        defineField({ name: "url", title: "Endereço do site", description: "Ex.: https://luisabandos.com", type: "url" }),
+        defineField({
+          name: "title",
+          title: "Título",
+          description: "Aparece no Google e na aba do navegador. Comece pelo nome, ex.: Luísa Bandos — Fotografia e direção de fotografia.",
+          type: "string",
+          validation: (rule) => rule.max(70).warning("O Google corta títulos com mais de uns 60 caracteres."),
+        }),
+        defineField({
+          name: "description",
+          title: "Descrição",
+          description: "Texto que aparece embaixo do título no Google e nas prévias de link.",
+          type: "text",
+          rows: 3,
+          validation: (rule) => rule.max(160).warning("O Google corta descrições com mais de uns 155 caracteres."),
+        }),
+        defineField({
+          name: "image",
+          title: "Imagem de compartilhamento",
+          description:
+            "Aparece quando alguém manda o link do site no WhatsApp ou nas redes. Use uma foto na horizontal; o ponto de foco define o recorte. Vazio = a primeira foto do topo da home.",
+          type: "picture",
+        }),
+        defineField({
+          name: "googleVerification",
+          title: "Código de verificação do Google",
+          description: "Do Google Search Console, método “Tag HTML”. Pode colar a tag inteira.",
+          type: "string",
+        }),
+        // O endereço oficial agora fica no código (src/lib/seo.ts).
+        defineField({ name: "url", title: "Endereço do site", type: "url", hidden: true }),
       ],
     }),
   ],

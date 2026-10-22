@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { getSiteContent } from "@/lib/content";
+import { homeJsonLd, pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
@@ -8,11 +11,16 @@ import { Contact } from "@/components/Contact";
 import { Cursor } from "@/components/Cursor";
 import styles from "./page.module.css";
 
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata(await getSiteContent(), { path: "/" });
+}
+
 export default async function Home() {
   const content = await getSiteContent();
 
   return (
     <>
+      <JsonLd data={homeJsonLd(content)} />
       <Header brand={content.brand} nav={content.nav} />
       <main>
         {/* O hero fica preso no topo e o resto da página rola por cima dele. */}

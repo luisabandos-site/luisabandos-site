@@ -60,7 +60,10 @@ export type SiteContent = {
   seo: {
     title: string;
     description: string;
-    url: string;
+    /** Foto da prévia quando o link é compartilhado. Sem ela, usa a primeira do topo. */
+    image?: Photo;
+    /** Código do Google Search Console (método "Tag HTML"). */
+    googleVerification?: string;
   };
   brand: string;
   nav: Link[];
