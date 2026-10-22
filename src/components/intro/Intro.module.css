@@ -1,0 +1,47 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px var(--margin) 32px;
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Visitas seguintes na mesma sessão: a intro nem aparece. */
+:global(html[data-intro="skip"]) .root {
+  display: none;
+}
+
+.brand {
+  color: var(--muted-dark);
+}
+
+.bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.count {
+  font-family: var(--font-display);
+  font-size: clamp(88px, 16vw, 240px);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  padding-bottom: 6px;
+  color: var(--muted-dark);
+}
+
+@media (max-width: 767px) {
+  .root {
+    padding: 20px var(--margin) 24px;
+  }
+}

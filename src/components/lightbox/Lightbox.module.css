@@ -98,12 +98,6 @@
   inset: 0;
 }
 
-.image {
-  object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
 .bottom {
   display: flex;
   align-items: flex-end;

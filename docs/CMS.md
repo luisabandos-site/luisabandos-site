@@ -14,9 +14,9 @@ nenhum componente precisa mudar.
 | `service` | `title`, `slug`, `tags[]`, `preview` (2 fotos), `href` | "O que eu faço" |
 | `home` (singleton) | hero (nome, foto, funções, redes), sobre (manifesto, bio, cidade, retrato), projetos (lista ordenada de fotos), serviços (lista), contato, rodapé | Página inicial |
 
-No Sanity, a imagem já traz largura, altura e cor média
-(`asset->metadata.dimensions` e `asset->metadata.palette.dominant.background`),
-que viram `width`, `height` e `color` do tipo `Photo`.
+No Sanity, a imagem já traz largura, altura, cor média e miniatura borrada
+(`asset->metadata.dimensions`, `asset->metadata.palette.dominant.background` e
+`asset->metadata.lqip`), que viram `width`, `height`, `color` e `blur` do tipo `Photo`.
 
 ## Passos
 

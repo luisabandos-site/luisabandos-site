@@ -1,8 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import type { Photo } from "@/content/types";
+import { preloadPhoto, queuePhoto } from "@/lib/preload";
+import { PhotoImage } from "../PhotoImage";
 import { useLightbox } from "./LightboxProvider";
+import { lightboxSizes } from "./sizes";
 import styles from "./ZoomablePhoto.module.css";
 
 type Props = {
@@ -10,33 +13,39 @@ type Props = {
   /** Fotos que dá para navegar na tela cheia (setas/arraste). */
   group?: Photo[];
   sizes: string;
-  priority?: boolean;
+  preload?: boolean;
   className?: string;
 };
 
 /** Foto clicável que abre em tela cheia com nome, lugar e data. */
-export function ZoomablePhoto({ photo, group, sizes, priority, className }: Props) {
+export function ZoomablePhoto({ photo, group, sizes, preload, className }: Props) {
   const { open } = useLightbox();
+  const ref = useRef<HTMLButtonElement>(null);
   const photos = group ?? [photo];
   const index = Math.max(0, photos.findIndex((p) => p.id === photo.id));
 
+  // Baixa em segundo plano, logo depois do topo do site, para a foto já estar
+  // pronta quando a pessoa rolar até ela.
+  useEffect(() => {
+    if (ref.current) queuePhoto(ref.current, photo, sizes);
+  }, [photo, sizes]);
+
   return (
     <button
+      ref={ref}
       type="button"
       className={`${styles.root} ${className ?? ""}`}
-      style={{ aspectRatio: `${photo.width} / ${photo.height}`, backgroundColor: photo.color }}
+      style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
       onClick={() => open(photos, index)}
+      // Ao passar o mouse (ou tocar), já começa a baixar a versão da tela cheia.
+      onPointerEnter={() => preloadPhoto(photo, lightboxSizes(photo))}
+      onPointerDown={() => preloadPhoto(photo, lightboxSizes(photo))}
       data-cursor="Ver"
       aria-label={`Abrir foto em tela cheia: ${photo.title}`}
     >
-      <Image
-        src={photo.src}
-        alt={photo.alt}
-        fill
-        sizes={sizes}
-        priority={priority}
-        className={styles.image}
-      />
+      <span className={styles.media}>
+        <PhotoImage photo={photo} sizes={sizes} preload={preload} />
+      </span>
     </button>
   );
 }

@@ -12,8 +12,9 @@
   will-change: transform;
 }
 
-.image {
-  object-fit: cover;
+.zoom {
+  position: absolute;
+  inset: 0;
 }
 
 .gradient {

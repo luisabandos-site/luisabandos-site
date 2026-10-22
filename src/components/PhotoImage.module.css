@@ -1,0 +1,36 @@
+.root {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+}
+
+/* Miniatura da própria foto, ampliada e desfocada. */
+.root::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  background: var(--blur) center / cover no-repeat;
+  filter: blur(28px) saturate(1.2);
+  transition: opacity 0.6s 0.5s;
+}
+
+.image {
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 1.6s var(--ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.root[data-loaded] .image {
+  opacity: 1;
+  transform: none;
+}
+
+.root[data-loaded]::before {
+  opacity: 0;
+}

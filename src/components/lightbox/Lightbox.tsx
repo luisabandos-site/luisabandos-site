@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion, type PanInfo } from "motion/react";
 import { useLenis } from "lenis/react";
 import type { Photo } from "@/content/types";
 import { formatPhotoDate } from "@/lib/format";
+import { preloadPhoto } from "@/lib/preload";
+import { PhotoImage } from "../PhotoImage";
+import { lightboxSizes } from "./sizes";
 import styles from "./Lightbox.module.css";
 
 type Props = {
@@ -68,6 +70,15 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+
+  // Deixa a anterior e a próxima já baixadas para a troca ser instantânea.
+  useEffect(() => {
+    if (!many) return;
+    for (const step of [1, -1]) {
+      const next = photos[(index + step + photos.length) % photos.length];
+      preloadPhoto(next, lightboxSizes(next));
+    }
+  }, [index, many, photos]);
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -60 || info.velocity.x < -400) go(1);
@@ -133,15 +144,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               animate={{ scale: 1 }}
               transition={{ duration: 1.1, ease }}
             >
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                sizes="(max-width: 767px) 100vw, 80vw"
-                priority
-                draggable={false}
-                className={styles.image}
-              />
+              <PhotoImage photo={photo} sizes={lightboxSizes(photo)} eager />
             </motion.div>
           </motion.div>
         </AnimatePresence>

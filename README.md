@@ -23,6 +23,8 @@ Por enquanto o conteúdo fica em arquivos simples:
 
 Dá para editar direto pelo GitHub (botão de lápis no arquivo). Ao salvar na branch principal, a Vercel publica sozinha.
 
+**Padrão das fotos:** JPEG com o lado maior em 3000 px, qualidade 90, perfil de cor sRGB. O site gera sozinho as versões menores (AVIF/WebP) para cada tela. Cada foto em `photos.ts` também guarda a cor média (`color`) e uma miniatura borrada (`blur`), que aparecem enquanto a foto carrega.
+
 Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn e o domínio.
 
 O próximo passo planejado é um painel de edição (CMS, ex.: Sanity), para a Luísa trocar fotos e textos sem mexer em código. O site já foi estruturado para isso; veja `docs/CMS.md`.

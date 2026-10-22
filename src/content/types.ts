@@ -23,6 +23,8 @@ export type Photo = {
   date: string;
   /** Cor média da foto, usada como fundo enquanto ela carrega. */
   color?: string;
+  /** Miniatura borrada (data URL) mostrada enquanto a foto carrega. */
+  blur?: string;
 };
 
 export type Link = {
