@@ -9,7 +9,7 @@ export function lightboxSizes(photo: Photo) {
   const mobile = window.innerWidth < 768;
   const margin = mobile ? 16 : 40;
   const maxW = window.innerWidth - 2 * margin;
-  const maxH = window.innerHeight - (mobile ? 300 : 230);
+  const maxH = window.innerHeight - (mobile ? 220 : 190);
   const width = Math.min(maxW, (maxH * photo.width) / photo.height);
   return `${Math.ceil(Math.max(width, 320))}px`;
 }

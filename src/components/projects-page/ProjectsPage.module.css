@@ -1,0 +1,89 @@
+.root {
+  --line: var(--line-dark);
+  position: relative;
+  background: var(--black);
+  color: var(--white);
+  padding: 190px var(--margin) 40px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 30px 0 34px;
+  border-bottom: 1px solid var(--line);
+}
+
+.filter {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid transparent;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  opacity: 0.6;
+  transition:
+    opacity 0.3s,
+    border-color 0.3s;
+}
+
+.filter:hover,
+.filter[aria-current="page"] {
+  opacity: 1;
+}
+
+.filter[aria-current="page"] {
+  border-color: currentColor;
+}
+
+.filterCount {
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.separator {
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.empty {
+  padding: 120px 0 80px;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  opacity: 0.6;
+}
+
+@media (max-width: 767px) {
+  .root {
+    padding-top: 120px;
+  }
+
+  /* No celular os filtros quebram linha; sem as barras, nenhuma fica sobrando no fim da linha. */
+  .filters {
+    gap: 8px 20px;
+    padding: 24px 0 20px;
+  }
+
+  .filter {
+    font-size: 16px;
+  }
+
+  .filterCount {
+    font-size: 11px;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  .empty {
+    padding: 64px 0 48px;
+    font-size: 16px;
+  }
+}

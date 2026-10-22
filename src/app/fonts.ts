@@ -16,4 +16,18 @@ export const archivo = localFont({
   display: "swap",
 });
 
+/**
+ * Itálico da Archivo, usado só em trechos destacados (ex.: "gente, luz e
+ * movimento" no Sobre mim). Sem preload: só baixa na página que usa.
+ */
+export const archivoItalic = localFont({
+  src: [
+    { path: "./fonts/archivo-italic-latin.woff2", weight: "100 900", style: "italic" },
+    { path: "./fonts/archivo-italic-latin-ext.woff2", weight: "100 900", style: "italic" },
+  ],
+  variable: "--font-archivo-italic",
+  display: "swap",
+  preload: false,
+});
+
 export const geist = GeistSans;

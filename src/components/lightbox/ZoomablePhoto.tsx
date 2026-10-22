@@ -14,11 +14,15 @@ type Props = {
   group?: Photo[];
   sizes: string;
   preload?: boolean;
+  /** Na tela cheia, mostra a categoria no lugar do nome (home). */
+  showCategory?: boolean;
   className?: string;
+  /** Algo por cima da foto (ex.: legenda do hover). */
+  children?: React.ReactNode;
 };
 
-/** Foto clicável que abre em tela cheia com nome, lugar e data. */
-export function ZoomablePhoto({ photo, group, sizes, preload, className }: Props) {
+/** Foto clicável que abre em tela cheia com nome (ou categoria), lugar e data. */
+export function ZoomablePhoto({ photo, group, sizes, preload, showCategory, className, children }: Props) {
   const { open } = useLightbox();
   const ref = useRef<HTMLButtonElement>(null);
   const photos = group ?? [photo];
@@ -36,7 +40,7 @@ export function ZoomablePhoto({ photo, group, sizes, preload, className }: Props
       type="button"
       className={`${styles.root} ${className ?? ""}`}
       style={{ aspectRatio: `${photo.width} / ${photo.height}` }}
-      onClick={() => open(photos, index)}
+      onClick={() => open(photos, index, { showCategory })}
       // Ao passar o mouse (ou tocar), já começa a baixar a versão da tela cheia.
       onPointerEnter={() => preloadPhoto(photo, lightboxSizes(photo))}
       onPointerDown={() => preloadPhoto(photo, lightboxSizes(photo))}
@@ -46,6 +50,7 @@ export function ZoomablePhoto({ photo, group, sizes, preload, className }: Props
       <span className={styles.media}>
         <PhotoImage photo={photo} sizes={sizes} preload={preload} />
       </span>
+      {children}
     </button>
   );
 }

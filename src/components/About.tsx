@@ -19,7 +19,7 @@ export function About({ about }: { about: SiteContent["about"] }) {
           <p className={styles.location}>{about.location}</p>
         </Reveal>
         <Reveal className={styles.portrait} variant="unveil" delay={0.1}>
-          <ZoomablePhoto photo={about.portrait} sizes={portraitSizes} />
+          <ZoomablePhoto photo={about.portrait} sizes={portraitSizes} showCategory />
         </Reveal>
       </div>
     </section>

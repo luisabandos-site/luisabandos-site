@@ -5,14 +5,15 @@ import { SmoothScroll } from "@/components/SmoothScroll";
 import { LightboxProvider } from "@/components/lightbox/LightboxProvider";
 import { IntroProvider } from "@/components/intro/IntroProvider";
 import { INTRO_SEEN_KEY } from "@/components/intro/constants";
-import { archivo, geist } from "./fonts";
+import { archivo, archivoItalic, geist } from "./fonts";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { seo, hero } = await getSiteContent();
   return {
     metadataBase: new URL(seo.url),
-    title: seo.title,
+    // As outras páginas viram "Projetos — Luísa Bandos".
+    title: { default: seo.title, template: `%s — ${hero.name}` },
     description: seo.description,
     openGraph: {
       title: seo.title,
@@ -29,9 +30,10 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-// Roda antes da página aparecer: se a intro já foi vista nesta sessão, ela
-// não volta a aparecer (nem por um instante).
-const introScript = `try{if(sessionStorage.getItem("${INTRO_SEEN_KEY}"))document.documentElement.dataset.intro="skip"}catch(e){}`;
+// Roda antes da página aparecer. A intro só abre o site pela home: se ela já
+// foi vista nesta sessão, ou se a pessoa entrou direto por outra página (ex.:
+// um link de /projetos), ela não aparece (nem por um instante).
+const introScript = `try{var s=sessionStorage;if(s.getItem("${INTRO_SEEN_KEY}")||location.pathname!=="/"){s.setItem("${INTRO_SEEN_KEY}","1");document.documentElement.dataset.intro="skip"}}catch(e){}`;
 
 // Sem JavaScript: esconde a intro.
 const noScriptStyle = `<style>[data-intro-root]{display:none!important}</style>`;
@@ -45,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   ];
 
   return (
-    <html lang="pt-BR" className={`${archivo.variable} ${geist.variable}`} suppressHydrationWarning>
+    <html lang="pt-BR" className={`${archivo.variable} ${archivoItalic.variable} ${geist.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: introScript }} />
         <noscript dangerouslySetInnerHTML={{ __html: noScriptStyle }} />

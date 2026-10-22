@@ -5,10 +5,15 @@ import { AnimatePresence } from "motion/react";
 import type { Photo } from "@/content/types";
 import { Lightbox } from "./Lightbox";
 
-type LightboxState = { photos: Photo[]; index: number } | null;
+export type LightboxOptions = {
+  /** Mostra a categoria (com link para Projetos) no lugar do nome. Usado na home. */
+  showCategory?: boolean;
+};
+
+type LightboxState = { photos: Photo[]; index: number; options: LightboxOptions } | null;
 
 type LightboxContextValue = {
-  open: (photos: Photo[], index: number) => void;
+  open: (photos: Photo[], index: number, options?: LightboxOptions) => void;
 };
 
 const LightboxContext = createContext<LightboxContextValue | null>(null);
@@ -22,8 +27,8 @@ export function useLightbox() {
 export function LightboxProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<LightboxState>(null);
 
-  const open = useCallback((photos: Photo[], index: number) => {
-    setState({ photos, index });
+  const open = useCallback((photos: Photo[], index: number, options: LightboxOptions = {}) => {
+    setState({ photos, index, options });
   }, []);
   const close = useCallback(() => setState(null), []);
   const go = useCallback((index: number) => {
@@ -41,6 +46,7 @@ export function LightboxProvider({ children }: { children: React.ReactNode }) {
             key="lightbox"
             photos={state.photos}
             index={state.index}
+            showCategory={state.options.showCategory}
             onClose={close}
             onNavigate={go}
           />

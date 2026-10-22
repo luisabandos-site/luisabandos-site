@@ -3,11 +3,13 @@
   --white: #fff;
   --accent: #2c8fff;
   --line-dark: rgba(255, 255, 255, 0.2);
+  --line-light: rgba(0, 0, 0, 0.15);
   --muted-dark: rgba(255, 255, 255, 0.6);
 
   --font-sans: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
   --font-label: var(--font-geist-sans), "Helvetica Neue", Arial, sans-serif;
+  --font-italic: var(--font-archivo-italic), "Helvetica Neue", Arial, sans-serif;
 
   /* Grid: 12 colunas, margem de 40px no desktop e 16px no celular. */
   --margin: 40px;

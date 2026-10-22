@@ -39,3 +39,33 @@ export function mobileGallery(photos: Photo[]) {
   const [a, b] = distribute(portraits, [1, 1], [0, 0.27], 0.05);
   return { first: landscapes[0], columns: [a, b], last: landscapes.slice(1) };
 }
+
+/**
+ * Colunas de mesma largura (página Projetos). `gap` é o espaço entre as fotos
+ * em proporção à largura da coluna. Como cada foto entra na coluna mais curta
+ * na ordem da lista, carregar mais fotos não mexe nas que já estão na tela.
+ */
+export function columns(photos: Photo[], count: number, gap: number) {
+  return distribute(photos, Array(count).fill(1), Array(count).fill(0), gap);
+}
+
+/**
+ * Quantas fotos mostrar perto de `target` para as colunas terminarem o mais
+ * alinhadas possível (sem um buraco grande em cima do "Carregar mais").
+ */
+export function balancedCount(photos: Photo[], target: number, count: number, gap: number) {
+  if (target >= photos.length) return photos.length;
+  let best = target;
+  let bestSpread = Infinity;
+  for (let n = Math.max(1, target - 3); n <= Math.min(photos.length, target + 3); n++) {
+    const heights = columns(photos.slice(0, n), count, gap).map((column) =>
+      column.reduce((sum, photo) => sum + ratio(photo) + gap, 0),
+    );
+    const spread = Math.max(...heights) - Math.min(...heights);
+    if (spread < bestSpread - 0.01 || (Math.abs(spread - bestSpread) <= 0.01 && Math.abs(n - target) < Math.abs(best - target))) {
+      best = n;
+      bestSpread = spread;
+    }
+  }
+  return best;
+}

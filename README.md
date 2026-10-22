@@ -17,15 +17,27 @@ Por enquanto o conteúdo fica em arquivos simples:
 
 | O quê | Arquivo |
 | --- | --- |
-| Textos da home (hero, sobre, serviços, contato, rodapé) | `src/content/site.ts` |
-| Fotos (arquivo, nome, lugar, data, texto alternativo) | `src/content/photos.ts` |
+| Textos da home, da página Projetos e da Sobre mim (inclusive a ordem das fotos em Projetos) | `src/content/site.ts` |
+| Fotos (arquivo, nome, lugar, data, categoria, texto alternativo) | `src/content/photos.ts` |
+| Categorias (nome, endereço e texto de cada filtro) | `src/content/categories.ts` |
 | Arquivos das imagens | `src/content/images/` |
+
+## Páginas
+
+| Endereço | Página |
+| --- | --- |
+| `/` | Home |
+| `/projetos` | Todas as fotos, com filtros por categoria |
+| `/projetos/eventos` (e as outras categorias) | Projetos já filtrado. Dá para mandar o link direto para alguém |
+| `/sobre` | Sobre mim |
+
+Na tela cheia, uma foto aberta pela home mostra a **categoria** (com link para Projetos filtrado), o lugar e a data. Nas outras páginas mostra o nome, o lugar e a data. Uma categoria sem fotos some dos filtros sozinha.
 
 Dá para editar direto pelo GitHub (botão de lápis no arquivo). Ao salvar na branch principal, a Vercel publica sozinha.
 
 **Padrão das fotos:** JPEG com o lado maior em 3000 px, qualidade 90, perfil de cor sRGB. O site gera sozinho as versões menores (AVIF/WebP) para cada tela. Cada foto em `photos.ts` também guarda a cor média (`color`) e uma miniatura borrada (`blur`), que aparecem enquanto a foto carrega.
 
-Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn e o domínio.
+Itens marcados com `PROVISÓRIO` ainda precisam de dado real: nomes/lugares/datas das fotos, e-mail, WhatsApp, links do Behance e LinkedIn, o domínio, a bio e a trajetória do Sobre mim e as descrições das categorias (só a de Eventos veio do Figma).
 
 O próximo passo planejado é um painel de edição (CMS, ex.: Sanity), para a Luísa trocar fotos e textos sem mexer em código. O site já foi estruturado para isso; veja `docs/CMS.md`.
 
