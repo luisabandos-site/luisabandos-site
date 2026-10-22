@@ -1,16 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import NextLink from "next/link";
 import { AnimatePresence, motion, type PanInfo } from "motion/react";
 import { useLenis } from "lenis/react";
 import type { Photo } from "@/content/types";
 import { formatPhotoDate } from "@/lib/format";
+import { preloadPhoto } from "@/lib/preload";
+import { PhotoImage } from "../PhotoImage";
+import { lightboxSizes } from "./sizes";
 import styles from "./Lightbox.module.css";
 
 type Props = {
   photos: Photo[];
   index: number;
+  /** Categoria (link para Projetos filtrado) no lugar do nome. */
+  showCategory?: boolean;
   onClose: () => void;
   onNavigate: (index: number) => void;
 };
@@ -18,7 +23,7 @@ type Props = {
 const ease = [0.22, 1, 0.36, 1] as const;
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
+export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: Props) {
   const lenis = useLenis();
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -52,7 +57,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
       else if (event.key === "ArrowRight") go(1);
       else if (event.key === "ArrowLeft") go(-1);
       else if (event.key === "Tab") {
-        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>("button");
+        const focusable = dialogRef.current?.querySelectorAll<HTMLElement>("a[href], button");
         if (!focusable?.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -68,6 +73,30 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
+
+  // Deixa a anterior e a próxima já baixadas para a troca ser instantânea.
+  useEffect(() => {
+    if (!many) return;
+    for (const step of [1, -1]) {
+      const next = photos[(index + step + photos.length) % photos.length];
+      preloadPhoto(next, lightboxSizes(next));
+    }
+  }, [index, many, photos]);
+
+  // Legenda: categoria (só na home) ou nome, lugar e data.
+  const category = showCategory ? photo.category : undefined;
+  const fields: [string, React.ReactNode][] = [
+    category
+      ? [
+          "Categoria",
+          <NextLink key={category.slug} href={`/projetos/${category.slug}`} className={styles.link} onClick={onClose}>
+            {category.title}
+          </NextLink>,
+        ]
+      : ["Nome", photo.title],
+    ["Lugar", photo.location],
+    ["Data", formatPhotoDate(photo.date)],
+  ];
 
   const onDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -60 || info.velocity.x < -400) go(1);
@@ -133,15 +162,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               animate={{ scale: 1 }}
               transition={{ duration: 1.1, ease }}
             >
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                sizes="(max-width: 767px) 100vw, 80vw"
-                priority
-                draggable={false}
-                className={styles.image}
-              />
+              <PhotoImage photo={photo} sizes={lightboxSizes(photo)} eager />
             </motion.div>
           </motion.div>
         </AnimatePresence>
@@ -149,13 +170,9 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
 
       <div className={styles.bottom}>
         <dl className={styles.caption} key={photo.id}>
-          {[
-            ["Nome", photo.title],
-            ["Lugar", photo.location],
-            ["Data", formatPhotoDate(photo.date)],
-          ].map(([term, value], i) => (
+          {fields.map(([term, value], i) => (
             <div key={term} className={styles.field}>
-              <dt className="label">{term}</dt>
+              <dt className={`label ${styles.term}`}>{term}</dt>
               <dd className={styles.mask}>
                 <motion.span
                   className={styles.value}

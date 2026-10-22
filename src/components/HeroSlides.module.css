@@ -1,0 +1,10 @@
+/* Todas as fotos ficam empilhadas (e já desenhadas); a ativa fica por cima.
+   Assim a troca é instantânea, sem piscar. */
+.slide {
+  position: absolute;
+  inset: 0;
+}
+
+.slide[data-active] {
+  z-index: 1;
+}

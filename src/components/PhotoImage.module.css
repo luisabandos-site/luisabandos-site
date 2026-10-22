@@ -1,0 +1,33 @@
+.root {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+}
+
+/* Miniatura da própria foto, ampliada e desfocada, por baixo da foto. */
+.root::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  background: var(--blur) var(--focus, center) / cover no-repeat;
+  filter: blur(28px) saturate(1.2);
+}
+
+/* Depois que a foto chega, a prévia não é mais necessária. */
+.root[data-loaded]::before {
+  display: none;
+}
+
+.image {
+  object-fit: cover;
+  object-position: var(--focus, center);
+  transition: opacity 0.6s var(--ease-out);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Só para a foto que ainda estava chegando quando a página ficou pronta. */
+.image[data-pending] {
+  opacity: 0;
+}

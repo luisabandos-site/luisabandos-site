@@ -1,8 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import NextLink from "next/link";
+import { usePathname } from "next/navigation";
+import { useLenis } from "lenis/react";
 import type { Link } from "@/content/types";
 import styles from "./Header.module.css";
+
+/** "/projetos/eventos" está dentro de "Projetos"; a home só em "/". */
+const isActive = (href: string, pathname: string) =>
+  href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
 /**
  * Menu fixo. Fica branco sobre seções escuras e preto sobre a seção branca
@@ -11,6 +18,16 @@ import styles from "./Header.module.css";
 export function Header({ brand, nav }: { brand: string; nav: Link[] }) {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [hidden, setHidden] = useState(false);
+  const pathname = usePathname();
+  const lenis = useLenis();
+
+  // Clicar na página em que já está volta suavemente para o topo.
+  const onNavigate = (href: string) => (event: React.MouseEvent) => {
+    if (href !== pathname) return;
+    event.preventDefault();
+    if (lenis) lenis.scrollTo(0, { duration: 1.6 });
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     let frame = 0;
@@ -49,20 +66,21 @@ export function Header({ brand, nav }: { brand: string; nav: Link[] }) {
 
   return (
     <header className={styles.root} data-on={theme} data-hidden={hidden || undefined}>
-      <a href="#top" className={styles.brand}>
+      <NextLink href="/" className={styles.brand} onClick={onNavigate("/")}>
         {brand}
-      </a>
+      </NextLink>
       <nav aria-label="Principal">
         <ul className={styles.nav}>
-          {nav.map((item, i) => (
+          {nav.map((item) => (
             <li key={item.href}>
-              <a
-                href={item.href === "/" ? "#top" : item.href}
+              <NextLink
+                href={item.href}
                 className={styles.link}
-                aria-current={i === 0 ? "page" : undefined}
+                aria-current={isActive(item.href, pathname) ? "page" : undefined}
+                onClick={onNavigate(item.href)}
               >
                 {item.label}
-              </a>
+              </NextLink>
             </li>
           ))}
         </ul>

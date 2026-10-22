@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import type { SiteContent } from "@/content/types";
+import { preloadPhoto } from "@/lib/preload";
+import { PhotoImage } from "./PhotoImage";
 import styles from "./Services.module.css";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const previewSizes = "240px";
 type Edge = "top" | "bottom";
 
 /**
@@ -34,6 +36,23 @@ export function Services({ services }: { services: SiteContent["services"] }) {
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, []);
+
+  // Baixa as fotos do hover quando a lista se aproxima da tela, para elas já
+  // estarem prontas quando o mouse passar.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        services.items.forEach((item) => item.preview.forEach((photo) => preloadPhoto(photo, previewSizes)));
+        observer.disconnect();
+      },
+      { rootMargin: "100% 0px" },
+    );
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [services.items]);
 
   // Celular: ativa a linha mais próxima do centro da tela.
   useEffect(() => {
@@ -135,13 +154,12 @@ export function Services({ services }: { services: SiteContent["services"] }) {
                         <motion.span
                           key={photo.id}
                           className={`${styles.shot} ${p === 0 ? styles.shotA : styles.shotB}`}
-                          style={{ backgroundColor: photo.color }}
                           initial={{ opacity: 0, scale: 0.6, rotate: 0, y: 40 }}
                           animate={{ opacity: 1, scale: 1, rotate: p === 0 ? -8 : 10, y: 0 }}
                           exit={{ opacity: 0, scale: 0.8, rotate: 0, y: 20, transition: { duration: 0.3 } }}
                           transition={{ duration: 0.7, ease, delay: p * 0.07 }}
                         >
-                          <Image src={photo.src} alt="" fill sizes="240px" className={styles.shotImage} />
+                          <PhotoImage photo={photo} alt="" sizes={previewSizes} />
                         </motion.span>
                       ))}
                       <motion.span

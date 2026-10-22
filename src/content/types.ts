@@ -1,15 +1,23 @@
 /**
  * Modelo de conteúdo do site.
  *
- * Tudo o que aparece na home (textos e fotos) segue estes tipos. Hoje o
+ * Tudo o que aparece no site (textos e fotos) segue estes tipos. Hoje o
  * conteúdo vem de arquivos locais (`photos.ts` e `site.ts`); quando um CMS
  * (ex.: Sanity) for plugado, ele só precisa devolver objetos neste mesmo
  * formato em `src/lib/content.ts` e nenhum componente precisa mudar.
  */
 
+export type Category = {
+  /** Pedaço do endereço: /projetos/<slug>. */
+  slug: string;
+  title: string;
+  /** Texto do topo da página Projetos com este filtro. */
+  description: string;
+};
+
 export type Photo = {
   id: string;
-  /** Caminho local (/images/...) ou URL do CMS. */
+  /** Endereço da foto: arquivo importado de `src/content/images` ou URL do CMS. */
   src: string;
   width: number;
   height: number;
@@ -23,6 +31,15 @@ export type Photo = {
   date: string;
   /** Cor média da foto, usada como fundo enquanto ela carrega. */
   color?: string;
+  /** Miniatura borrada (data URL) mostrada enquanto a foto carrega. */
+  blur?: string;
+  /**
+   * Ponto da foto que fica sempre à vista quando ela é cortada para caber na
+   * tela (CSS object-position, ex.: "50% 80%"). No Sanity, vem do hotspot.
+   */
+  focus?: string;
+  /** Categoria do trabalho (filtro da página Projetos). */
+  category?: Category;
 };
 
 export type Link = {
@@ -49,7 +66,8 @@ export type SiteContent = {
   nav: Link[];
   hero: {
     name: string;
-    image: Photo;
+    /** Fotos do topo, que trocam sozinhas em loop (a primeira abre o site). */
+    images: Photo[];
     roles: string[];
     socials: Link[];
   };
@@ -83,5 +101,44 @@ export type SiteContent = {
     copyright: string;
     tagline: string;
     backToTop: string;
+  };
+  /** Página Projetos (/projetos e /projetos/<categoria>). */
+  projectsPage: {
+    title: string;
+    /** Texto do topo quando nenhum filtro está ativo. */
+    description: string;
+    allLabel: string;
+    loadMore: string;
+    /** Mensagem de uma categoria que ainda não tem fotos. */
+    empty: string;
+    /** Ordem dos filtros. */
+    categories: Category[];
+    /** Todas as fotos, na ordem da galeria. Cada filtro mostra as da sua categoria. */
+    photos: Photo[];
+  };
+  /** Página Sobre mim (/sobre). */
+  aboutPage: {
+    title: string;
+    /** Linhas à direita do título. */
+    location: string[];
+    intro: {
+      label: string;
+      /** Texto grande. O trecho entre *asteriscos* fica em itálico. */
+      statement: string;
+      /** Um parágrafo por coluna. */
+      bio: string[];
+      portrait: Photo;
+    };
+    skills: {
+      label: string;
+      items: { title: string; items: string[] }[];
+    };
+    timeline: {
+      label: string;
+      years: {
+        year: string;
+        items: { name: string; type: string; role: string }[];
+      }[];
+    };
   };
 };

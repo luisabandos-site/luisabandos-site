@@ -121,10 +121,6 @@
   height: calc(300px * var(--s));
 }
 
-.shotImage {
-  object-fit: cover;
-}
-
 .cta {
   position: absolute;
   left: calc(170px * var(--s));

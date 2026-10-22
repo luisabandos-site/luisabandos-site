@@ -1,21 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 import type { SiteContent } from "@/content/types";
 import { FitText } from "./FitText";
+import { useIntro } from "./intro/IntroProvider";
+import { HeroSlides } from "./HeroSlides";
 import styles from "./Hero.module.css";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /**
  * Hero fixo (sticky): a seção branca "Sobre mim" sobe por cima dele. Enquanto
- * é coberto, a foto dá um leve zoom e escurece.
+ * é coberto, a foto dá um leve zoom e escurece. As fotos trocam sozinhas em
+ * loop, e as animações de entrada esperam a intro terminar.
  */
 export function Hero({ hero }: { hero: SiteContent["hero"] }) {
   const [viewport, setViewport] = useState(900);
   const { scrollY } = useScroll();
+  const { ready } = useIntro();
 
   useEffect(() => {
     const update = () => setViewport(window.innerHeight);
@@ -34,19 +37,19 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
     <section className={styles.root} data-theme="dark" id="top" aria-label="Início">
       <motion.div
         className={styles.media}
-        style={{ scale, backgroundColor: hero.image.color }}
-        initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
-        animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-        transition={{ duration: 1.4, ease }}
+        style={{ scale, backgroundColor: hero.images[0]?.color }}
+        initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+        animate={{ clipPath: ready ? "inset(0% 0% 0% 0%)" : "inset(100% 0% 0% 0%)" }}
+        transition={{ duration: 1.3, ease, delay: 0.1 }}
       >
-        <Image
-          src={hero.image.src}
-          alt={hero.image.alt}
-          fill
-          priority
-          sizes="100vw"
-          className={styles.image}
-        />
+        <motion.div
+          className={styles.zoom}
+          initial={{ scale: 1.2 }}
+          animate={{ scale: ready ? 1 : 1.2 }}
+          transition={{ duration: 2, ease, delay: 0.1 }}
+        >
+          <HeroSlides images={hero.images} ready={ready} />
+        </motion.div>
       </motion.div>
       <div className={styles.gradient} aria-hidden="true" />
       <motion.div className={styles.shade} style={{ opacity: shade }} aria-hidden="true" />
@@ -61,8 +64,8 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
                   key={i}
                   className={styles.char}
                   initial={{ y: "110%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ duration: 1.1, ease, delay: 0.5 + i * 0.035 }}
+                  animate={{ y: ready ? "0%" : "110%" }}
+                  transition={{ duration: 1.1, ease, delay: 0.35 + i * 0.035 }}
                 >
                   {char === " " ? " " : char}
                 </motion.span>
@@ -74,8 +77,8 @@ export function Hero({ hero }: { hero: SiteContent["hero"] }) {
         <motion.div
           className={styles.meta}
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 1.1 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.9, ease, delay: 0.9 }}
         >
           <ul className={styles.socials}>
             {hero.socials.map((item, i) => (

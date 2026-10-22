@@ -11,7 +11,7 @@ export function Projects({ projects }: { projects: SiteContent["projects"] }) {
 
   const item = (photo: Photo, sizes: string) => (
     <Reveal key={photo.id} variant="unveil">
-      <ZoomablePhoto photo={photo} group={photos} sizes={sizes} />
+      <ZoomablePhoto photo={photo} group={photos} sizes={sizes} showCategory />
     </Reveal>
   );
 

@@ -12,8 +12,15 @@
   will-change: transform;
 }
 
-.image {
-  object-fit: cover;
+.zoom {
+  position: absolute;
+  inset: 0;
+}
+
+/* Quando a intro já foi vista nesta sessão, a foto aparece direto, sem a
+   revelação de baixo para cima. */
+:global(html[data-intro="skip"]) .media {
+  clip-path: none !important;
 }
 
 .gradient {
