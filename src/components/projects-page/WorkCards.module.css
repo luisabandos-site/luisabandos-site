@@ -23,15 +23,22 @@
   transition: transform 1.2s var(--ease-out);
 }
 
+/* Como os filtros e os títulos do site: Archivo regular, número em sobrescrito. */
 .title {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
   margin-top: 16px;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.1vw, 34px);
-  font-weight: 700;
-  line-height: 1.05;
+  font-size: clamp(22px, 1.67vw, 32px);
+  line-height: 1.1;
   letter-spacing: -0.04em;
   transition: opacity 0.4s;
+}
+
+.count {
+  font-size: 13px;
+  letter-spacing: 0;
+  opacity: 0.6;
 }
 
 @media (hover: hover) {
@@ -66,5 +73,9 @@
   .title {
     margin-top: 12px;
     font-size: 22px;
+  }
+
+  .count {
+    font-size: 11px;
   }
 }

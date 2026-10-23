@@ -10,9 +10,12 @@ import styles from "./WorkCards.module.css";
 
 const sizes = "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 32vw";
 
+const pad = (n: number) => String(n).padStart(2, "0");
+
 /**
  * Cards de uma categoria de projetos ou filmes: capa na proporção dela e o
- * nome embaixo. Cada card abre a página do projeto.
+ * nome embaixo, com o número de fotos como nos filtros. Cada card abre a
+ * página do projeto.
  */
 export function WorkCards({ works }: { works: Work[] }) {
   const transition = usePageTransition();
@@ -38,7 +41,10 @@ export function WorkCards({ works }: { works: Work[] }) {
                   {cover && <PhotoImage photo={cover} sizes={sizes} preload={i < 3} />}
                 </span>
               </Reveal>
-              <span className={styles.title}>{work.title}</span>
+              <span className={styles.title}>
+                {work.title}
+                {work.photos.length > 0 && <span className={styles.count}>{pad(work.photos.length)}</span>}
+              </span>
             </NextLink>
           </li>
         );
