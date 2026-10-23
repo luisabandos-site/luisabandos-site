@@ -1,5 +1,6 @@
 import { categories } from "./categories";
 import { photos } from "./photos";
+import { works } from "./works";
 import type { SiteContent } from "./types";
 
 /**
@@ -15,7 +16,7 @@ export const site: SiteContent = {
   brand: "Luisa Bandos",
   nav: [
     { label: "Home", href: "/" },
-    { label: "Projetos", href: "/projetos" },
+    { label: "Trabalho", href: "/trabalho" },
     { label: "Sobre mim", href: "/sobre" },
   ],
   hero: {
@@ -63,35 +64,35 @@ export const site: SiteContent = {
         slug: "retratos",
         title: "Retratos",
         tags: ["pessoal", "editorial", "corporativo"],
-        href: "/projetos/retratos",
+        href: "/trabalho/retratos",
         preview: [photos.retratoCoroa, photos.retratoFumaca],
       },
       {
         slug: "eventos",
         title: "Eventos",
         tags: ["festas", "shows", "celebrações"],
-        href: "/projetos/eventos",
+        href: "/trabalho/eventos",
         preview: [photos.festaSereia, photos.showDanca],
       },
       {
         slug: "still-e-making-of",
         title: "Still e making of",
         tags: ["bastidores", "cena", "produção"],
-        href: "/projetos/still-e-making-of",
+        href: "/trabalho/still-e-making-of",
         preview: [photos.makingOfBastidor, photos.stillEscritorio],
       },
       {
-        slug: "projetos-autorais",
-        title: "Projetos autorais",
+        slug: "projetos",
+        title: "Projetos",
         tags: ["séries", "experimentais"],
-        href: "/projetos/projetos-autorais",
+        href: "/trabalho/projetos",
         preview: [photos.cidadeGritaFoster, photos.cidadeGritaCartaz],
       },
       {
         slug: "audiovisual",
         title: "Audiovisual",
         tags: [],
-        href: "/projetos/audiovisual",
+        href: "/trabalho/audiovisual",
         preview: [photos.setCamera, photos.setLuzVerde],
       },
     ],
@@ -133,7 +134,7 @@ export const site: SiteContent = {
     backToTop: "Voltar ao topo",
   },
   projectsPage: {
-    title: "Projetos",
+    title: "Trabalho",
     description: "Retratos, eventos, bastidores e audiovisual. Uma seleção de trabalhos entre palcos, sets e a noite.",
     allLabel: "Todos",
     loadMore: "Carregar mais",
@@ -142,7 +143,7 @@ export const site: SiteContent = {
       categories.retratos,
       categories.eventos,
       categories.stillEMakingOf,
-      categories.projetosAutorais,
+      categories.projetos,
       categories.audiovisual,
     ],
     // As 15 primeiras seguem o Figma; o "Carregar mais" traz de 15 em 15.
@@ -222,6 +223,7 @@ export const site: SiteContent = {
       photos.cidadeGritaGrades,
       photos.cidadeGritaBanca,
     ],
+    works,
   },
   aboutPage: {
     title: "Sobre mim",

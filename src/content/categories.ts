@@ -2,8 +2,9 @@ import type { Category } from "./types";
 
 /**
  * Categorias de trabalho. Cada foto diz a sua em `photos.ts`, e cada uma vira
- * um filtro com endereço próprio na página Projetos (ex.: /projetos/eventos).
- * Uma categoria sem nenhuma foto some dos filtros sozinha.
+ * um filtro com endereço próprio na página Trabalho (ex.: /trabalho/eventos).
+ * Uma categoria sem nenhuma foto some dos filtros sozinha. As categorias em
+ * cards (`layout: "cards"`) mostram projetos ou filmes (ver `works.ts`).
  *
  * As descrições aparecem no topo da página quando o filtro está ativo.
  * Só a de Eventos veio do Figma; as outras são PROVISÓRIAS.
@@ -24,14 +25,16 @@ export const categories = {
     title: "Still e making of",
     description: "Bastidores e cenas de sets de filmagem, clipes e editoriais. O que acontece em volta da câmera.",
   },
-  projetosAutorais: {
-    slug: "projetos-autorais",
-    title: "Projetos autorais",
+  projetos: {
+    slug: "projetos",
+    title: "Projetos",
     description: "Séries pessoais e experimentais. A cidade grita: muros, pichações e o que a rua tem a dizer.",
+    layout: "cards",
   },
   audiovisual: {
     slug: "audiovisual",
     title: "Audiovisual",
     description: "Direção de fotografia, operação e assistência de câmera em clipes, curtas e documentários.",
+    layout: "cards",
   },
 } satisfies Record<string, Category>;

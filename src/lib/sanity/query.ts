@@ -11,6 +11,8 @@ const asset = `asset->{
 
 const picture = `alt, crop, hotspot, ${asset}`;
 
+const photo = `_key, title, location, date, showOnHome, ${picture}`;
+
 /** Todo o conteúdo do site numa consulta só (só o que está publicado). */
 export const siteQuery = `{
   "settings": *[_id == "settings"][0]{
@@ -31,8 +33,19 @@ export const siteQuery = `{
     title,
     "slug": slug.current,
     description,
+    layout,
     tags,
-    "photos": photos[defined(asset)]{ _key, title, location, date, showOnHome, ${picture} }
+    "photos": photos[defined(asset)]{ ${photo} }
+  },
+  "works": *[_type == "project" && defined(slug.current) && defined(category->slug.current)] | order(coalesce(order, 999) asc, _createdAt desc) {
+    title,
+    "slug": slug.current,
+    "category": category->slug.current,
+    cover { ${picture} },
+    text,
+    link,
+    video,
+    "photos": photos[defined(asset)]{ ${photo} }
   }
 }`;
 
@@ -108,7 +121,18 @@ export type SiteQueryResult = {
     title?: string;
     slug: string;
     description?: string;
+    layout?: "photos" | "cards";
     tags?: string[];
+    photos?: SanityPhoto[] | null;
+  }[];
+  works: {
+    title?: string;
+    slug: string;
+    category: string;
+    cover?: SanityPicture | null;
+    text?: string;
+    link?: LinkValue;
+    video?: string;
     photos?: SanityPhoto[] | null;
   }[];
 };

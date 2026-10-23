@@ -74,10 +74,10 @@ export const home = defineType({
   preview: { prepare: () => ({ title: "Home" }) },
 });
 
-/** Textos da página Projetos. As fotos e os filtros vêm das categorias. */
+/** Textos da página Trabalho. As fotos, os cards e os filtros vêm das categorias. */
 export const projectsPage = defineType({
   name: "projectsPage",
-  title: "Página Projetos",
+  title: "Página Trabalho",
   type: "document",
   icon: DocumentTextIcon,
   fields: [
@@ -91,9 +91,9 @@ export const projectsPage = defineType({
     }),
     defineField({ name: "allLabel", title: "Nome do filtro com todas as fotos", type: "string" }),
     defineField({ name: "loadMore", title: "Texto do botão de carregar mais", type: "string" }),
-    defineField({ name: "empty", title: "Mensagem de categoria sem fotos", type: "string" }),
+    defineField({ name: "empty", title: "Mensagem de categoria vazia", type: "string" }),
   ],
-  preview: { prepare: () => ({ title: "Página Projetos" }) },
+  preview: { prepare: () => ({ title: "Página Trabalho" }) },
 });
 
 /** Página Sobre mim. */
@@ -242,7 +242,7 @@ export const settings = defineType({
       group: "general",
       fields: [
         defineField({ name: "home", title: "Home", type: "string" }),
-        defineField({ name: "projects", title: "Projetos", type: "string" }),
+        defineField({ name: "projects", title: "Trabalho", type: "string" }),
         defineField({ name: "about", title: "Sobre mim", type: "string" }),
       ],
     }),

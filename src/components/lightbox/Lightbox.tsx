@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import NextLink from "next/link";
+import { categoryHref } from "@/lib/routes";
 import { AnimatePresence, motion, type PanInfo } from "motion/react";
 import { useLenis } from "lenis/react";
 import type { Photo } from "@/content/types";
@@ -86,22 +87,24 @@ export function Lightbox({ photos, index, showCategory, onClose, onNavigate }: P
     }
   }, [index, many, photos]);
 
-  // Legenda: categoria (só na home) ou nome, lugar e data.
+  // Legenda: categoria ou projeto (só na home) ou nome, lugar e data. Foto
+  // de um projeto ou filme leva para a página dele; as outras, para a categoria.
   const category = showCategory ? photo.category : undefined;
+  const target = photo.work ?? (category ? { title: category.title, href: categoryHref(category.slug) } : undefined);
   const fields: [string, React.ReactNode][] = [
-    category
+    category && target
       ? [
-          "Categoria",
+          photo.work ? category.title : "Categoria",
           <NextLink
-            key={category.slug}
-            href={`/projetos/${category.slug}`}
+            key={target.href}
+            href={target.href}
             className={styles.link}
             onClick={(event) => {
-              transition(event, `/projetos/${category.slug}`, category.title);
+              transition(event, target.href, target.title);
               onClose();
             }}
           >
-            {category.title}
+            {target.title}
           </NextLink>,
         ]
       : ["Nome", photo.title],

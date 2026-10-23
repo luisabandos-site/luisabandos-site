@@ -354,7 +354,7 @@ export const photos = {
     date: "2026-02",
     color: "#888888",
     blur: "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAQCdASoIAAwAAoBCJaQAAp1URSAAAP5stj9RggCR6XZn1/8g1uzlOpHpZFUwdcw3DVKCEy1NjBVQAAA=",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
   }),
   cidadeGritaCartaz: photo({
     id: "cidade-grita-cartaz",
@@ -367,7 +367,7 @@ export const photos = {
     date: "2026-02",
     color: "#832d2f",
     blur: "data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAAAQAgCdASoMAAgAAoBCJbACdAYqNgehvrbgAP70L5+yiVTf5cU48ntmG1zbabjODsx3TFpW0I3wPzscjzf6ELvU02+ar85KDH/8uTndBaNanYJW/4Fh+/P17AAAAA==",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
   }),
   setCamera: photo({
     id: "set-camera",
@@ -665,7 +665,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#b8b9b2",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAADwAQCdASoMAAkAAoBCJZQCsAECpdgONQAA/vvHqFVeUZcf7X3wsp3xNZCv/9FsoXxjpgKduuZdKaB8rkW3EoH7LWyf4TqJmkrmn67d7hPgAA==",
   }),
   cidadeGritaGrades: photo({
@@ -678,7 +678,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#7c7c7b",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoMAAkAAoBCJZwAAvd4yjpgAADiB9NG19PtDp0tkf7MX06j+mXzbk7wuErDqCTXV1OVfbpd1gA=",
   }),
   cidadeGritaSemDo: photo({
@@ -691,7 +691,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#6f6f6f",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAACQAQCdASoMAAkAAoBCJaQAAlJwsQAA/cZLKrJkaNxwqrlT7z1e0QyWAjUbsj1JToI4PLYPz69RfYdJHdAAAA==",
   }),
   cidadeGritaMarighella: photo({
@@ -704,7 +704,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#595b4b",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAADwAQCdASoMAAkAAoBCJQBdgCHcQdM5AIAA/tIvGKi9ZSPkwEhjrwF2BnHI+cTH/Hsl12KfPFrUFCeQDq51sZVCWOTAAA==",
   }),
   cidadeGritaTempo: photo({
@@ -717,7 +717,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#c38c64",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoMAAkAAoBCJbACdLoAAjpgsAD3wIaVC2eNpN1zhLc39/orOT5N4exln4rq1DtTfxQmWpL2AAA=",
   }),
   cidadeGritaLagrima: photo({
@@ -730,7 +730,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2026-02",
     color: "#8e8576",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoMAAkAAoBCJYwCdAEQXpscjqAA/tc/3jZ5+VNgH0+Zd8mevGDD4sx17mPbPNJSmxPrFdjOc2F98z8MwHE9hBUifq/qQaGoAAA=",
   }),
   cidadeGritaMuro: photo({
@@ -743,7 +743,7 @@ export const photos = {
     location: "São Carlos, SP",
     date: "2025-04",
     color: "#9f9896",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAADwAQCdASoMAAgAAoBCJZQCdAERGbvgEAAA/sq7yvzX+voO+xT2dIb4aTV5MirN8i9J33Q3TZLFaYfzcbtgOEEEUFGqAAAA",
   }),
   cidadeGritaViaduto: photo({
@@ -756,7 +756,7 @@ export const photos = {
     location: "São Paulo, SP",
     date: "2024-11",
     color: "#8d8d8d",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADQAQCdASoMAAkAAoBCJaQAAvdx6Z4oAAD+7e9l+FTQ+w7KT0/yvE/PbLVV1olB3GkEKfZMtHNvdB6MUybMgylWGETPUH1ROp6gAAAA",
   }),
   cidadeGritaBanca: photo({
@@ -769,7 +769,7 @@ export const photos = {
     location: "São Paulo, SP",
     date: "2024-12",
     color: "#8c847a",
-    category: categories.projetosAutorais,
+    category: categories.projetos,
     blur: "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAABQAgCdASoMAAkAAoBCJZQCdEf/gcX/EBdcUIAA/Z15KpAsH29upi+eV9nqPnArwxa2Ckz2/8ZK1F1lxdZ78WUM5ldZyjSbxH/uflXhHMPvxPm9tb/Dwo0gEgq8EfoW3ymEg3KAAAA=",
   }),
   retratoTorreDia: photo({

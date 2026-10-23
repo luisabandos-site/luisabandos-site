@@ -14,6 +14,13 @@ const absolute = (src: string) => new URL(src, SITE_URL).href;
 /** "Luísa Bandos" → "Luisa Bandos", para quem busca sem acento. */
 const withoutAccents = (value: string) => value.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
+/** Encurta um texto para a descrição do Google (uns 155 caracteres), sem partir palavra. */
+export function excerpt(value: string, max = 155) {
+  const plain = value.replaceAll("*", "").replace(/\s+/g, " ").trim();
+  if (plain.length <= max) return plain;
+  return `${plain.slice(0, plain.lastIndexOf(" ", max - 1))}…`;
+}
+
 /** Foto da prévia de compartilhamento: a escolhida no painel ou a primeira do topo. */
 export const shareImage = (content: SiteContent): Photo | undefined => content.seo.image ?? content.hero.images[0];
 

@@ -15,23 +15,28 @@ Site de fotografia da Luísa Bandos, feito em **Next.js** a partir do layout do 
 
 No painel, em **`/studio`** (ex.: luisabandos-site.vercel.app/studio), com login do Sanity:
 
-- **Fotos por categoria**: arraste várias fotos de uma vez, mude a ordem arrastando, clique numa foto para editar nome, lugar, data e marcar **Mostrar na home**.
-- **Home**, **Página Projetos**, **Página Sobre mim** e **Contato e informações gerais**: todos os textos.
+- **Fotos por categoria**: arraste várias fotos de uma vez, mude a ordem arrastando, clique numa foto para editar nome, lugar, data e marcar **Mostrar na home**. Em **Como aparece**, a categoria mostra uma galeria de fotos ou **cards de projetos ou filmes** (Projetos e Audiovisual).
+- **Projetos e filmes**: cada um vira um card na sua categoria e abre uma página com o nome dentro da elipse, o texto (opcional), um link embaixo do texto, um vídeo do YouTube ou Vimeo e a galeria de fotos.
+- **Home**, **Página Trabalho**, **Página Sobre mim** e **Contato e informações gerais**: todos os textos.
 
 Depois de **Publicar**, o site atualiza sozinho em até 1 minuto. Detalhes técnicos em `docs/CMS.md`.
 
-Os arquivos em `src/content/` (textos, `photos.ts` e `images/`) são o conteúdo de antes do painel. Eles servem para o botão **Importar** do painel e como reserva para uma página que ainda não existe lá.
+Os arquivos em `src/content/` (textos, `photos.ts` e `images/`) são o conteúdo de antes do painel. Eles servem para o botão **Importar e atualizar** do painel e como reserva para uma página que ainda não existe lá.
 
 ## Páginas
 
 | Endereço | Página |
 | --- | --- |
 | `/` | Home |
-| `/projetos` | Todas as fotos, com filtros por categoria |
-| `/projetos/eventos` (e as outras categorias) | Projetos já filtrado. Dá para mandar o link direto para alguém |
+| `/trabalho` | Todas as fotos, com filtros por categoria |
+| `/trabalho/eventos` (e as outras categorias) | Trabalho já filtrado. Dá para mandar o link direto para alguém |
+| `/trabalho/projetos`, `/trabalho/audiovisual` | Cards dos projetos ou filmes da categoria |
+| `/trabalho/projetos/a-cidade-grita` | Página de um projeto ou filme: texto e galeria |
 | `/sobre` | Sobre mim |
 
-Na tela cheia, uma foto aberta pela home mostra a **categoria** (com link para Projetos filtrado), o lugar e a data. Nas outras páginas mostra o nome, o lugar e a data. Uma categoria sem fotos some dos filtros sozinha.
+Os endereços antigos (`/projetos/...`, de antes da página se chamar Trabalho) levam para os novos.
+
+Na tela cheia, uma foto aberta pela home mostra a **categoria** (com link para a categoria ou para a página do projeto), o lugar e a data. Nas outras páginas mostra o nome, o lugar e a data. Uma categoria sem fotos (ou sem projetos) some dos filtros sozinha.
 
 **Padrão das fotos:** JPEG com o lado maior entre 2500 e 3000 px, perfil de cor sRGB. O CDN do Sanity gera sozinho as versões menores (WebP) para cada tela, a cor média e a miniatura borrada que aparecem enquanto a foto carrega.
 
