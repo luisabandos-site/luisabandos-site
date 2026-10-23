@@ -4,21 +4,19 @@ import { motion } from "motion/react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Entrada suave quando o elemento aparece na tela. */
+/**
+ * Entrada suave dos textos quando aparecem na tela. As fotos não usam: com
+ * muitas na tela, o movimento cansava (pedido do felipe em 2026-10-23).
+ */
 export function Reveal({
   children,
   className,
   delay = 0,
-  variant = "rise",
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  variant?: "rise" | "unveil";
 }) {
-  // Teste: as fotos ("unveil") aparecem direto, sem subir ao entrar na tela.
-  if (variant === "unveil") return <div className={className}>{children}</div>;
-
   return (
     <motion.div
       className={className}

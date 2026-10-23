@@ -1,7 +1,6 @@
 import type { Photo, SiteContent } from "@/content/types";
 import { desktopGallery, mobileGallery } from "@/lib/masonry";
 import { ZoomablePhoto } from "./lightbox/ZoomablePhoto";
-import { Reveal } from "./Reveal";
 import styles from "./Projects.module.css";
 
 export function Projects({ projects }: { projects: SiteContent["projects"] }) {
@@ -10,9 +9,9 @@ export function Projects({ projects }: { projects: SiteContent["projects"] }) {
   const mobile = mobileGallery(photos);
 
   const item = (photo: Photo, sizes: string) => (
-    <Reveal key={photo.id} variant="unveil">
+    <div key={photo.id}>
       <ZoomablePhoto photo={photo} group={photos} sizes={sizes} showCategory />
-    </Reveal>
+    </div>
   );
 
   return (

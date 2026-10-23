@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import type { Photo } from "@/content/types";
 import { balancedCount, columns } from "@/lib/masonry";
 import { ZoomablePhoto } from "../lightbox/ZoomablePhoto";
-import { Reveal } from "../Reveal";
 import styles from "./ProjectsGallery.module.css";
 
 type Props = {
@@ -43,7 +42,7 @@ export function ProjectsGallery({ photos, loadMore, pageSize = 15 }: Props) {
   };
 
   const item = (photo: Photo) => (
-    <Reveal key={photo.id} variant="unveil">
+    <div key={photo.id}>
       <ZoomablePhoto
         photo={photo}
         group={photos}
@@ -57,7 +56,7 @@ export function ProjectsGallery({ photos, loadMore, pageSize = 15 }: Props) {
           {hoverCaption(photo)}
         </span>
       </ZoomablePhoto>
-    </Reveal>
+    </div>
   );
 
   return (
