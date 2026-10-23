@@ -19,6 +19,23 @@
   white-space: nowrap;
 }
 
+/* Título que quebra linha: o número fica colado na última palavra. */
+.title[data-wrap] {
+  display: block;
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.title[data-wrap] .count {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.title[data-long] {
+  font-size: clamp(48px, 6.25vw, 140px);
+  line-height: 0.9;
+}
+
 .count {
   margin: 0.1em 0 0 0.03em;
   font-size: max(14px, 0.109em);
@@ -51,6 +68,10 @@
 
   .title {
     font-size: 18vw;
+  }
+
+  .title[data-long] {
+    font-size: 11vw;
   }
 
   .aside,

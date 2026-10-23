@@ -1,12 +1,12 @@
 import type { SiteContent, Work } from "@/content/types";
-import { categoryHref } from "@/lib/routes";
 import { Header } from "../Header";
+import { PageTitle } from "../PageTitle";
 import { Contact } from "../Contact";
 import { Cursor } from "../Cursor";
 import { Reveal } from "../Reveal";
 import { withEmphasis } from "../emphasis";
 import { ProjectsGallery } from "../projects-page/ProjectsGallery";
-import { BackLink } from "./BackLink";
+import { WorkFilters } from "../projects-page/WorkFilters";
 import { VideoEmbed } from "./VideoEmbed";
 import styles from "./WorkPage.module.css";
 
@@ -14,47 +14,50 @@ type Props = { content: SiteContent; work: Work };
 
 const isExternal = (href: string) => /^https?:\/\//.test(href);
 
+/** Texto curto fica numa coluna só; a partir disso, em duas, como a bio do Sobre mim. */
+const TWO_COLUMNS_FROM = 400;
+
 /**
- * Página de um projeto ou filme: nome dentro de uma elipse, texto
- * centralizado (opcional), link, vídeo e a galeria de fotos.
+ * Página de um projeto ou filme, com a estrutura da página Trabalho: título
+ * gigante, filtros (com a categoria do projeto marcada), texto (opcional),
+ * vídeo (opcional) e a galeria.
  */
 export function WorkPage({ content, work }: Props) {
-  const { link } = work;
+  const { link, text } = work;
+  const twoColumns = text.join(" ").length >= TWO_COLUMNS_FROM;
 
   return (
     <>
       <Header brand={content.brand} nav={content.nav} />
       <main>
         <article className={styles.root} data-theme="dark">
-          <BackLink href={categoryHref(work.category.slug)} label={work.category.title} />
+          <PageTitle title={work.title} count={work.photos.length} wrap />
 
-          <header className={styles.intro}>
-            <Reveal>
-              <h1 className={styles.title}>
-                <span className={styles.oval}>{work.title}</span>
-              </h1>
-            </Reveal>
+          <WorkFilters page={content.projectsPage} active={work.category} current="location" />
 
-            {work.text.length > 0 && (
-              <Reveal className={styles.text} delay={0.1}>
-                {work.text.map((paragraph, i) => (
-                  <p key={i}>{withEmphasis(paragraph)}</p>
-                ))}
-              </Reveal>
-            )}
-
-            {link && (
-              <Reveal delay={0.15}>
-                <a
-                  href={link.href}
-                  className={styles.link}
-                  {...(isExternal(link.href) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {link.label || link.href}
-                </a>
-              </Reveal>
-            )}
-          </header>
+          {(text.length > 0 || link) && (
+            <div className={styles.intro}>
+              {text.length > 0 && (
+                <Reveal className={twoColumns ? `${styles.text} ${styles.twoColumns}` : styles.text}>
+                  {text.map((paragraph, i) => (
+                    <p key={i}>{withEmphasis(paragraph)}</p>
+                  ))}
+                </Reveal>
+              )}
+              {link && (
+                <Reveal className={styles.linkRow} delay={0.1}>
+                  <a
+                    href={link.href}
+                    className={styles.link}
+                    {...(isExternal(link.href) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {link.label || link.href}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </Reveal>
+              )}
+            </div>
+          )}
 
           {work.video && <VideoEmbed url={work.video} title={work.title} />}
 

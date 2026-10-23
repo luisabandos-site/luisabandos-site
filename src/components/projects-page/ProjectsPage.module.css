@@ -32,11 +32,11 @@
 }
 
 .filter:hover,
-.filter[aria-current="page"] {
+.filter[aria-current] {
   opacity: 1;
 }
 
-.filter[aria-current="page"] {
+.filter[aria-current] {
   border-color: currentColor;
 }
 
