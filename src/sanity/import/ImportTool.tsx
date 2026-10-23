@@ -5,20 +5,22 @@ import { useClient } from "sanity";
 import { Box, Button, Card, Container, Flex, Heading, Stack, Text } from "@sanity/ui";
 import { site } from "@/content/site";
 import { apiVersion } from "../env";
-import { buildDocuments, uploadsFor } from "./build";
+import { buildDocuments, type SanityDocument, uploadsFor } from "./build";
+import { upgrade } from "./upgrade";
 
 type State =
   | { step: "idle" }
   | { step: "running"; done: number; total: number; message: string }
-  | { step: "done"; created: number; kept: number }
+  | { step: "done"; created: number; updated: number; kept: number }
   | { step: "error"; message: string };
 
 const PARALLEL = 3;
 
 /**
- * Leva os textos e as fotos que hoje estão no código do site para o painel.
- * Pode rodar mais de uma vez: fotos já enviadas não sobem de novo e nenhum
- * documento que já existe é trocado (nada que foi editado se perde).
+ * Leva os textos e as fotos que hoje estão no código do site para o painel e
+ * adapta o que já está lá quando o site muda de formato (`upgrade`). Pode
+ * rodar mais de uma vez: fotos já enviadas não sobem de novo e nada que foi
+ * editado se perde.
  */
 export function ImportTool() {
   const client = useClient({ apiVersion });
@@ -66,18 +68,30 @@ export function ImportTool() {
       };
       await Promise.all(Array.from({ length: PARALLEL }, worker));
 
-      progress("Criando categorias e páginas…");
+      progress("Criando e atualizando categorias e páginas…");
       const documents = buildDocuments(site, assets);
-      const ids: string[] = await client.fetch(`*[_id in $ids]._id`, { ids: documents.map((doc) => doc._id) });
-      const already = new Set(ids);
-      const missing = documents.filter((doc) => !already.has(doc._id));
-      if (missing.length) {
+      const ids = documents.map((doc) => doc._id);
+      // "raw" traz também os rascunhos, que precisam mudar junto.
+      const live: SanityDocument[] = await client.fetch(
+        `*[_type == "category" || _id in $ids || _id in $drafts]`,
+        { ids, drafts: ids.map((id) => `drafts.${id}`) },
+        { perspective: "raw" },
+      );
+      const present = new Set(live.map((doc) => doc._id));
+      const { replacements, patches } = upgrade(documents, live);
+      const replaced = new Map(replacements.map((doc) => [doc._id, doc]));
+      const missing = documents
+        .filter((doc) => !present.has(doc._id))
+        .map((doc) => replaced.get(doc._id) ?? doc);
+      if (missing.length || patches.length) {
         const transaction = client.transaction();
         for (const doc of missing) transaction.createIfNotExists(doc);
+        for (const { id, ...operations } of patches) transaction.patch(id, operations);
         await transaction.commit();
       }
 
-      setState({ step: "done", created: missing.length, kept: already.size });
+      const updated = new Set(patches.map((patch) => patch.id.replace(/^drafts\./, ""))).size;
+      setState({ step: "done", created: missing.length, updated, kept: documents.length - missing.length });
     } catch (error) {
       failed = true;
       setState({ step: "error", message: error instanceof Error ? error.message : String(error) });
@@ -88,23 +102,24 @@ export function ImportTool() {
     <Container width={1} padding={4} paddingTop={6}>
       <Stack gap={5}>
         <Heading as="h1" size={3}>
-          Importar conteúdo atual
+          Importar e atualizar
         </Heading>
         <Text size={2} muted>
-          Traz para o painel os textos e as {uploadsFor(site).length} fotos que já estão no site. Precisa ser feito uma vez
-          só. Se for rodado de novo, nada que já foi editado aqui é trocado.
+          Traz para o painel os textos e as {uploadsFor(site).length} fotos que já estão no site e adapta o conteúdo
+          daqui quando o site ganha um formato novo (como os cards de projetos e filmes). Pode rodar quantas vezes
+          quiser: nada que já foi editado aqui se perde.
         </Text>
 
         {state.step === "idle" && (
           <Box>
-            <Button text="Importar" tone="primary" fontSize={2} padding={4} onClick={run} />
+            <Button text="Importar e atualizar" tone="primary" fontSize={2} padding={4} onClick={run} />
           </Box>
         )}
 
         {state.step === "running" && (
           <Card padding={4} radius={3} tone="primary" border>
             <Stack gap={4}>
-              <Text weight="medium">Importando, não feche esta aba…</Text>
+              <Text weight="medium">Trabalhando, não feche esta aba…</Text>
               <Box style={{ height: 6, borderRadius: 3, background: "var(--card-border-color)" }}>
                 <Box
                   style={{
@@ -126,11 +141,17 @@ export function ImportTool() {
         {state.step === "done" && (
           <Card padding={4} radius={3} tone="positive" border>
             <Stack gap={4}>
-              <Text weight="medium">Pronto! Tudo importado.</Text>
+              <Text weight="medium">Pronto! Tudo em dia.</Text>
               <Text size={1}>
-                {state.created} documentos criados
-                {state.kept > 0 ? ` e ${state.kept} que já existiam foram mantidos como estavam` : ""}. Abra “Fotos por
-                categoria” para ver as fotos. O site passa a usar o painel em até 1 minuto.
+                {[
+                  `${state.created} ${state.created === 1 ? "documento criado" : "documentos criados"}`,
+                  state.updated > 0 && `${state.updated} ${state.updated === 1 ? "atualizado" : "atualizados"} para o formato novo`,
+                  state.kept - state.updated > 0 && `${state.kept - state.updated} mantidos como estavam`,
+                ]
+                  .filter(Boolean)
+                  .join(", ")}
+                . Abra “Fotos por categoria” ou “Projetos e filmes” para ver as fotos. O site se atualiza em até 1
+                minuto.
               </Text>
               <Flex>
                 <Button as="a" href="/studio/structure" text="Ir para o conteúdo" tone="positive" />

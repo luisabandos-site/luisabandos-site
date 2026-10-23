@@ -1,7 +1,10 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { ImagesIcon } from "@sanity/icons/Images";
 
-/** Categoria de trabalho: um filtro da página Projetos e uma linha de "O que eu faço". */
+/**
+ * Categoria de trabalho: um filtro da página Trabalho e uma linha de "O que eu
+ * faço". Mostra uma galeria de fotos ou cards de projetos e filmes.
+ */
 export const category = defineType({
   name: "category",
   title: "Categoria",
@@ -15,6 +18,19 @@ export const category = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "layout",
+      title: "Como aparece",
+      type: "string",
+      options: {
+        list: [
+          { title: "Galeria de fotos", value: "photos" },
+          { title: "Cards de projetos ou filmes", value: "cards" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "photos",
+    }),
+    defineField({
       name: "photos",
       title: "Fotos",
       description:
@@ -22,11 +38,12 @@ export const category = defineType({
       type: "array",
       of: [defineArrayMember({ type: "photo" })],
       options: { layout: "grid" },
+      hidden: ({ document }) => document?.layout === "cards",
     }),
     defineField({
       name: "description",
       title: "Descrição",
-      description: "Texto do topo da página Projetos quando esta categoria está filtrada.",
+      description: "Texto do topo da página Trabalho quando esta categoria está filtrada.",
       type: "text",
       rows: 3,
     }),
@@ -48,7 +65,7 @@ export const category = defineType({
     defineField({
       name: "slug",
       title: "Endereço",
-      description: "Final do link da categoria: luisabandos.com/projetos/…",
+      description: "Final do link da categoria: luisabandos.com/trabalho/…",
       type: "slug",
       options: { source: "title" },
       validation: (rule) => rule.required(),
@@ -56,8 +73,9 @@ export const category = defineType({
   ],
   orderings: [{ title: "Posição", name: "order", by: [{ field: "order", direction: "asc" }] }],
   preview: {
-    select: { title: "title", photos: "photos" },
-    prepare: ({ title, photos }) => {
+    select: { title: "title", photos: "photos", layout: "layout" },
+    prepare: ({ title, photos, layout }) => {
+      if (layout === "cards") return { title, subtitle: "Cards: projetos ou filmes" };
       const list = Array.isArray(photos) ? photos : [];
       return { title, media: list[0], subtitle: list.length === 1 ? "1 foto" : `${list.length} fotos` };
     },

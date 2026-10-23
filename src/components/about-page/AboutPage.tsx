@@ -5,12 +5,8 @@ import { Contact } from "../Contact";
 import { Cursor } from "../Cursor";
 import { Reveal } from "../Reveal";
 import { ZoomablePhoto } from "../lightbox/ZoomablePhoto";
+import { withEmphasis } from "../emphasis";
 import styles from "./AboutPage.module.css";
-
-/** "Trabalho onde tem *gente, luz*: palcos" → o trecho entre asteriscos em itálico. */
-function withEmphasis(text: string) {
-  return text.split("*").map((part, i) => (i % 2 ? <em key={i}>{part}</em> : part));
-}
 
 const portraitSizes = "(max-width: 767px) 100vw, 30vw";
 

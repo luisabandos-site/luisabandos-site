@@ -8,11 +8,16 @@
  */
 
 export type Category = {
-  /** Pedaço do endereço: /projetos/<slug>. */
+  /** Pedaço do endereço: /trabalho/<slug>. */
   slug: string;
   title: string;
-  /** Texto do topo da página Projetos com este filtro. */
+  /** Texto do topo da página Trabalho com este filtro. */
   description: string;
+  /**
+   * Como a categoria aparece: galeria de fotos (padrão) ou cards de projetos
+   * ou filmes, cada um com a sua página.
+   */
+  layout?: "photos" | "cards";
 };
 
 export type Photo = {
@@ -38,13 +43,32 @@ export type Photo = {
    * tela (CSS object-position, ex.: "50% 80%"). No Sanity, vem do hotspot.
    */
   focus?: string;
-  /** Categoria do trabalho (filtro da página Projetos). */
+  /** Categoria do trabalho (filtro da página Trabalho). */
   category?: Category;
+  /** Projeto ou filme de onde a foto vem, quando ela está dentro de um. */
+  work?: { title: string; href: string };
 };
 
 export type Link = {
   label: string;
   href: string;
+};
+
+/** Projeto ou filme de uma categoria em cards (ex.: Projetos, Audiovisual). */
+export type Work = {
+  /** Pedaço do endereço: /trabalho/<categoria>/<slug>. */
+  slug: string;
+  title: string;
+  category: Category;
+  /** Foto do card (a capa escolhida ou a primeira da galeria). */
+  cover?: Photo;
+  /** Parágrafos do texto do topo (o trecho entre *asteriscos* fica em itálico). Pode ser vazio. */
+  text: string[];
+  /** Link opcional embaixo do texto (ex.: "Acesse o acervo completo"). */
+  link?: Link;
+  /** Vídeo do YouTube ou do Vimeo, opcional. */
+  video?: string;
+  photos: Photo[];
 };
 
 export type Service = {
@@ -105,7 +129,7 @@ export type SiteContent = {
     tagline: string;
     backToTop: string;
   };
-  /** Página Projetos (/projetos e /projetos/<categoria>). */
+  /** Página Trabalho (/trabalho e /trabalho/<categoria>). */
   projectsPage: {
     title: string;
     /** Texto do topo quando nenhum filtro está ativo. */
@@ -118,6 +142,8 @@ export type SiteContent = {
     categories: Category[];
     /** Todas as fotos, na ordem da galeria. Cada filtro mostra as da sua categoria. */
     photos: Photo[];
+    /** Projetos e filmes das categorias em cards, na ordem do painel. */
+    works: Work[];
   };
   /** Página Sobre mim (/sobre). */
   aboutPage: {

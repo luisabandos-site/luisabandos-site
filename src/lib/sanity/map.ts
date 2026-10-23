@@ -1,4 +1,5 @@
-import type { Category, Link, Photo, SiteContent } from "@/content/types";
+import type { Category, Link, Photo, SiteContent, Work } from "@/content/types";
+import { categoryHref, workHref } from "@/lib/routes";
 import type { SanityPhoto, SanityPicture, SiteQueryResult } from "./query";
 
 /**
@@ -16,6 +17,13 @@ const monthOf = (value?: string) => {
 };
 
 const text = (value?: string) => value ?? "";
+
+/** Texto com uma linha em branco entre os parágrafos → lista de parágrafos. */
+const paragraphs = (value?: string) =>
+  (value ?? "")
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 const link = (value?: { label?: string; href?: string }): Link => ({ label: text(value?.label), href: text(value?.href) });
 
 /** Foto do painel → Photo. Aplica o recorte e o ponto de foco escolhidos no painel. */
@@ -53,8 +61,15 @@ function toPhoto(image: SanityPicture | undefined, id: string, extra: Partial<Ph
 /** Aceita só o código ou a tag inteira do Search Console (<meta … content="código" />). */
 const verificationCode = (value?: string) => value?.match(/content=["']([^"']+)["']/)?.[1] ?? (value?.trim() || undefined);
 
-function toPortfolioPhoto(image: SanityPhoto, category: Category, name: string): Photo | null {
-  const photo = toPhoto(image, `${category.slug}-${image._key}`, { category });
+/** Foto de uma categoria ou, com `work`, de um projeto ou filme dela. */
+function toPortfolioPhoto(
+  image: SanityPhoto,
+  category: Category,
+  name: string,
+  work?: { slug: string; title: string; href: string },
+): Photo | null {
+  const id = [category.slug, work?.slug, image._key].filter(Boolean).join("-");
+  const photo = toPhoto(image, id, { category, ...(work ? { work: { title: work.title, href: work.href } } : {}) });
   if (!photo) return null;
   photo.title = text(image.title);
   photo.location = text(image.location);
@@ -80,12 +95,45 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
   const { settings, home, projectsPage, aboutPage } = data;
   const name = home?.name || fallback.hero.name;
 
+  type Entry = { image: SanityPhoto; photo: Photo };
+  const portfolio = (
+    images: SanityPhoto[] | null | undefined,
+    category: Category,
+    work?: { slug: string; title: string; href: string },
+  ) =>
+    (images ?? [])
+      .map((image) => ({ image, photo: toPortfolioPhoto(image, category, name, work) }))
+      .filter((entry): entry is Entry => entry.photo !== null);
+
   const categories = data.categories.map((item) => {
-    const category: Category = { slug: item.slug, title: text(item.title), description: text(item.description) };
-    const photos = (item.photos ?? [])
-      .map((image) => ({ image, photo: toPortfolioPhoto(image, category, name) }))
-      .filter((entry): entry is { image: SanityPhoto; photo: Photo } => entry.photo !== null);
-    return { category, tags: item.tags ?? [], photos };
+    const category: Category = {
+      slug: item.slug,
+      title: text(item.title),
+      description: text(item.description),
+      layout: item.layout === "cards" ? "cards" : "photos",
+    };
+    // Categoria em cards: as fotos são as dos projetos ou filmes dela.
+    const works = (data.works ?? [])
+      .filter((work) => category.layout === "cards" && work.category === item.slug)
+      .map((work) => {
+        const href = workHref(category.slug, work.slug);
+        const title = text(work.title);
+        const photos = portfolio(work.photos, category, { slug: work.slug, title, href });
+        const value: Work = {
+          slug: work.slug,
+          title,
+          category,
+          cover: toPhoto(work.cover ?? undefined, `${category.slug}-${work.slug}-capa`, { alt: work.cover?.alt || title }) ??
+            photos[0]?.photo,
+          text: paragraphs(work.text),
+          link: work.link?.href ? link(work.link) : undefined,
+          video: work.video || undefined,
+          photos: photos.map(({ photo }) => photo),
+        };
+        return { work: value, photos };
+      });
+    const photos = category.layout === "cards" ? works.flatMap((entry) => entry.photos) : portfolio(item.photos, category);
+    return { category, tags: item.tags ?? [], photos, works: works.map((entry) => entry.work) };
   });
   const allPhotos = mix(categories.map(({ photos }) => photos.map(({ photo }) => photo)));
   const homePhotos = mix(
@@ -98,7 +146,7 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
     content.brand = settings.brand || fallback.brand;
     content.nav = [
       { label: settings.nav?.home || "Home", href: "/" },
-      { label: settings.nav?.projects || "Projetos", href: "/projetos" },
+      { label: settings.nav?.projects || "Trabalho", href: "/trabalho" },
       { label: settings.nav?.about || "Sobre mim", href: "/sobre" },
     ];
     content.seo = {
@@ -146,12 +194,22 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
     content.services = {
       label: text(home.services?.label),
       cta: text(home.services?.cta),
-      items: categories.map(({ category, tags, photos }) => ({
+      items: categories.map(({ category, tags, photos, works }) => ({
         slug: category.slug,
         title: category.title,
         tags,
-        href: `/projetos/${category.slug}`,
-        preview: photos.slice(0, 2).map(({ photo }) => photo),
+        href: categoryHref(category.slug),
+        // Categoria em cards: as capas dos projetos ou filmes e, se faltar, fotos deles.
+        preview:
+          category.layout === "cards"
+            ? [
+                ...new Map(
+                  [...works.flatMap((work) => (work.cover ? [work.cover] : [])), ...works.flatMap((work) => work.photos)].map(
+                    (photo) => [photo.src, photo],
+                  ),
+                ).values(),
+              ].slice(0, 2)
+            : photos.slice(0, 2).map(({ photo }) => photo),
       })),
     };
   }
@@ -165,6 +223,7 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
       empty: text(projectsPage.empty),
       categories: categories.map(({ category }) => category),
       photos: allPhotos,
+      works: categories.flatMap(({ works }) => works),
     };
   }
 

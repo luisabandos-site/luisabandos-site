@@ -22,10 +22,15 @@ export type SanityDocument = { _id: string; _type: string; [field: string]: unkn
 /** No site, a home usava um recorte desta foto; no painel ela vale a original. */
 const homeAliases: Record<string, string> = { "retrato-torre": "retrato-entardecer" };
 
+/** A categoria Projetos se chamava Projetos autorais e manteve o id antigo no painel. */
+const categoryIds: Record<string, string> = { projetos: "projetos-autorais" };
+export const categoryId = (slug: string) => `category-${categoryIds[slug] ?? slug}`;
+
 /** Todas as fotos usadas em algum lugar, uma vez cada. */
 export function uploadsFor(site: SiteContent): Upload[] {
   const all = [
     ...site.projectsPage.photos,
+    ...site.projectsPage.works.flatMap((work) => [...(work.cover ? [work.cover] : []), ...work.photos]),
     ...site.hero.images,
     site.about.portrait,
     site.aboutPage.intro.portrait,
@@ -67,36 +72,57 @@ export function buildDocuments(site: SiteContent, assets: Map<string, string>): 
   const onHome = new Set(site.projects.photos.map((photo) => homeAliases[photo.id] ?? photo.id));
   const tags = new Map(site.services.items.map((service) => [service.slug, service.tags]));
 
+  const portfolioPhoto = (photo: Photo): ImageValue => ({
+    _type: "photo",
+    _key: photo.id,
+    asset: asset(photo),
+    hotspot: hotspot(photo.focus),
+    showOnHome: onHome.has(photo.id),
+    title: photo.title,
+    location: photo.location,
+    // O painel guarda dia, mês e ano; o site mostra mês e ano.
+    date: photo.date.length === 7 ? `${photo.date}-01` : photo.date,
+    alt: photo.alt,
+  });
+
   const categories = site.projectsPage.categories.map((category, i) => ({
-    _id: `category-${category.slug}`,
+    _id: categoryId(category.slug),
     _type: "category",
     title: category.title,
     slug: { _type: "slug", current: category.slug },
+    layout: category.layout ?? "photos",
     order: i + 1,
     description: category.description,
     tags: tags.get(category.slug) ?? [],
-    photos: site.projectsPage.photos
-      .filter((photo) => photo.category?.slug === category.slug)
-      .map(
-        (photo): ImageValue => ({
-          _type: "photo",
-          _key: photo.id,
-          asset: asset(photo),
-          hotspot: hotspot(photo.focus),
-          showOnHome: onHome.has(photo.id),
-          title: photo.title,
-          location: photo.location,
-          // O painel guarda dia, mês e ano; o site mostra mês e ano.
-          date: photo.date.length === 7 ? `${photo.date}-01` : photo.date,
-          alt: photo.alt,
+    // Numa categoria em cards, as fotos ficam em cada projeto ou filme.
+    ...(category.layout === "cards"
+      ? {}
+      : {
+          photos: site.projectsPage.photos
+            .filter((photo) => photo.category?.slug === category.slug)
+            .map(portfolioPhoto),
         }),
-      ),
+  }));
+
+  const projects = site.projectsPage.works.map((work) => ({
+    _id: `project-${work.slug}`,
+    _type: "project",
+    title: work.title,
+    slug: { _type: "slug", current: work.slug },
+    category: { _type: "reference", _ref: categoryId(work.category.slug) },
+    order: site.projectsPage.works.filter((other) => other.category.slug === work.category.slug).indexOf(work) + 1,
+    ...(work.cover ? { cover: picture(work.cover) } : {}),
+    text: work.text.join("\n\n"),
+    ...(work.link ? { link: { _type: "link", ...work.link } } : {}),
+    ...(work.video ? { video: work.video } : {}),
+    photos: work.photos.map(portfolioPhoto),
   }));
 
   const navLabel = (href: string) => site.nav.find((item) => item.href === href)?.label;
 
   return [
     ...categories,
+    ...projects,
     {
       _id: "home",
       _type: "home",
@@ -147,7 +173,7 @@ export function buildDocuments(site: SiteContent, assets: Map<string, string>): 
       _id: "settings",
       _type: "settings",
       brand: site.brand,
-      nav: { home: navLabel("/"), projects: navLabel("/projetos"), about: navLabel("/sobre") },
+      nav: { home: navLabel("/"), projects: navLabel("/trabalho"), about: navLabel("/sobre") },
       contact: {
         label: site.contact.label,
         headline: site.contact.headline,

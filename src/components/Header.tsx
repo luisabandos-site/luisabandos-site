@@ -8,7 +8,7 @@ import type { Link } from "@/content/types";
 import { usePageTransition } from "./transition/PageTransition";
 import styles from "./Header.module.css";
 
-/** "/projetos/eventos" está dentro de "Projetos"; a home só em "/". */
+/** "/trabalho/eventos" está dentro de "Trabalho"; a home só em "/". */
 const isActive = (href: string, pathname: string) =>
   href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 

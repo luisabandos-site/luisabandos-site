@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
     // Fotos do painel não passam por aqui: o CDN do Sanity gera cada tamanho
     // (ver src/lib/sanity/image.ts).
   },
+  // A seção Projetos virou Trabalho (2026-10) e "Projetos autorais" virou
+  // "Projetos": links antigos (Google, mensagens) continuam funcionando.
+  async redirects() {
+    return [
+      { source: "/projetos/projetos-autorais/:path*", destination: "/trabalho/projetos/:path*", permanent: true },
+      { source: "/trabalho/projetos-autorais/:path*", destination: "/trabalho/projetos/:path*", permanent: true },
+      { source: "/projetos/:path*", destination: "/trabalho/:path*", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
