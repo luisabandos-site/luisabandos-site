@@ -18,9 +18,9 @@ export function About({ about }: { about: SiteContent["about"] }) {
           <p>{about.bio}</p>
           <p className={styles.location}>{about.location}</p>
         </Reveal>
-        <Reveal className={styles.portrait} variant="unveil" delay={0.1}>
+        <div className={styles.portrait}>
           <ZoomablePhoto photo={about.portrait} sizes={portraitSizes} showCategory />
-        </Reveal>
+        </div>
       </div>
     </section>
   );

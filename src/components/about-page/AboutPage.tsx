@@ -28,9 +28,9 @@ export function AboutPage({ content }: { content: SiteContent }) {
           <div className={styles.intro}>
             <h2 className={styles.label}>{intro.label}</h2>
             <div className={styles.introGrid}>
-              <Reveal className={styles.portrait} variant="unveil">
+              <div className={styles.portrait}>
                 <ZoomablePhoto photo={intro.portrait} sizes={portraitSizes} preload />
-              </Reveal>
+              </div>
               <Reveal className={styles.statement}>
                 <p>{withEmphasis(intro.statement)}</p>
               </Reveal>

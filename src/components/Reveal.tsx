@@ -4,30 +4,26 @@ import { motion } from "motion/react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Entrada suave quando o elemento aparece na tela. */
+/**
+ * Entrada suave dos textos quando aparecem na tela. As fotos não usam: com
+ * muitas na tela, o movimento cansava (pedido do felipe em 2026-10-23).
+ */
 export function Reveal({
   children,
   className,
   delay = 0,
-  variant = "rise",
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
-  variant?: "rise" | "unveil";
 }) {
-  const hidden =
-    variant === "unveil" ? { clipPath: "inset(100% 0% 0% 0%)" } : { opacity: 0, y: 32 };
-  const shown =
-    variant === "unveil" ? { clipPath: "inset(0% 0% 0% 0%)" } : { opacity: 1, y: 0 };
-
   return (
     <motion.div
       className={className}
-      initial={hidden}
-      whileInView={shown}
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: variant === "unveil" ? 1.2 : 0.9, ease, delay }}
+      transition={{ duration: 0.9, ease, delay }}
     >
       {children}
     </motion.div>
