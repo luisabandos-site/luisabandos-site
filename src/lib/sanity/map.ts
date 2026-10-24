@@ -61,6 +61,19 @@ function toPhoto(image: SanityPicture | undefined, id: string, extra: Partial<Ph
 /** Aceita só o código ou a tag inteira do Search Console (<meta … content="código" />). */
 const verificationCode = (value?: string) => value?.match(/content=["']([^"']+)["']/)?.[1] ?? (value?.trim() || undefined);
 
+/** Ficha de um filme: "Direção (ano)" e "formato • gênero • duração", pulando o que estiver vazio. */
+function credits(work: SiteQueryResult["works"][number]) {
+  const direction = text(work.direction).trim();
+  const year = work.year ? String(work.year) : "";
+  return [
+    direction && year ? `${direction} (${year})` : direction || year,
+    [work.format, work.genre, work.duration]
+      .map((value) => text(value).trim())
+      .filter(Boolean)
+      .join(" • "),
+  ].filter(Boolean);
+}
+
 /** Foto de uma categoria ou, com `work`, de um projeto ou filme dela. */
 function toPortfolioPhoto(
   image: SanityPhoto,
@@ -123,6 +136,8 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
           slug: work.slug,
           title,
           category,
+          role: text(work.role).trim() || undefined,
+          credits: credits(work),
           cover: toPhoto(work.cover ?? undefined, `${category.slug}-${work.slug}-capa`, { alt: work.cover?.alt || title }) ??
             photos[0]?.photo,
           text: paragraphs(work.text),

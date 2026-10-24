@@ -60,6 +60,10 @@ export type Work = {
   slug: string;
   title: string;
   category: Category;
+  /** Função embaixo do nome, ex.: "diretora e idealizadora". */
+  role?: string;
+  /** Linhas da ficha à direita do nome, ex.: "luisa bandos (2023)" e "curta • doc • 6'33". */
+  credits: string[];
   /** Foto do card (a capa escolhida ou a primeira da galeria). */
   cover?: Photo;
   /** Parágrafos do texto do topo (o trecho entre *asteriscos* fica em itálico). Pode ser vazio. */
