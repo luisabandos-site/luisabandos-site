@@ -1,10 +1,28 @@
+"use client";
+
+import { useMemo, useSyncExternalStore } from "react";
 import type { Photo, SiteContent } from "@/content/types";
 import { desktopGallery, mobileGallery } from "@/lib/masonry";
+import { shuffle } from "@/lib/shuffle";
 import { ZoomablePhoto } from "./lightbox/ZoomablePhoto";
 import styles from "./Projects.module.css";
 
+/**
+ * Sorteada uma vez a cada vez que o site é aberto (refresh ou nova visita).
+ * Enquanto a pessoa navega pelo site ela não muda, então a galeria volta na
+ * mesma ordem para a home (pedido do felipe em 2026-10-24).
+ */
+let visitSeed: number | undefined;
+const getVisitSeed = () => (visitSeed ??= Math.floor(Math.random() * 2 ** 32));
+const noop = () => () => {};
+
 export function Projects({ projects }: { projects: SiteContent["projects"] }) {
-  const { photos } = projects;
+  // No servidor (e na hidratação) a ordem do painel; no navegador, embaralhada.
+  const seed = useSyncExternalStore(noop, getVisitSeed, () => null);
+  const photos = useMemo(
+    () => (seed === null ? projects.photos : shuffle(projects.photos, seed)),
+    [projects.photos, seed],
+  );
   const desktop = desktopGallery(photos);
   const mobile = mobileGallery(photos);
 
