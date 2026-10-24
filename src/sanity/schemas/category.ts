@@ -31,6 +31,20 @@ export const category = defineType({
       initialValue: "photos",
     }),
     defineField({
+      name: "cardShape",
+      title: "Capas dos cards",
+      description: "Vazio = todas do mesmo tamanho. O ponto de foco de cada capa decide o recorte.",
+      type: "string",
+      options: {
+        list: [
+          { title: "Todas do mesmo tamanho (16:9, como um filme)", value: "film" },
+          { title: "Cada capa na proporção dela", value: "free" },
+        ],
+        layout: "radio",
+      },
+      hidden: ({ document }) => document?.layout !== "cards",
+    }),
+    defineField({
       name: "photos",
       title: "Fotos",
       description:

@@ -12,8 +12,8 @@ const sizes = "(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 32vw";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * Cards de uma categoria de projetos ou filmes: capa na proporção dela e o
- * nome embaixo, com o número de fotos como nos filtros. Cada card abre a
+ * Cards de uma categoria de projetos ou filmes: capa (todas do mesmo tamanho
+ * ou cada uma na proporção dela, como escolhido no painel) e o nome embaixo, com o número de fotos como nos filtros. Cada card abre a
  * página do projeto.
  */
 export function WorkCards({ works }: { works: Work[] }) {
@@ -34,7 +34,7 @@ export function WorkCards({ works }: { works: Work[] }) {
             >
               <span
                 className={styles.media}
-                style={{ aspectRatio: cover ? `${cover.width} / ${cover.height}` : undefined }}
+                style={{ aspectRatio: work.category.cardRatio ?? (cover ? `${cover.width} / ${cover.height}` : undefined) }}
               >
                 {cover && <PhotoImage photo={cover} sizes={sizes} preload={i < 3} />}
               </span>

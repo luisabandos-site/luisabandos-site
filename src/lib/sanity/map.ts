@@ -18,6 +18,9 @@ const monthOf = (value?: string) => {
 
 const text = (value?: string) => value ?? "";
 
+/** Proporção das capas quando todos os cards de uma categoria têm o mesmo tamanho. */
+const CARD_RATIO = "16 / 9";
+
 /** Texto com uma linha em branco entre os parágrafos → lista de parágrafos. */
 const paragraphs = (value?: string) =>
   (value ?? "")
@@ -125,6 +128,8 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
       description: text(item.description),
       layout: item.layout === "cards" ? "cards" : "photos",
     };
+    // Cards do mesmo tamanho, como pediu o felipe (capas em 16:9, a do "Epitáfio").
+    if (category.layout === "cards" && item.cardShape !== "free") category.cardRatio = CARD_RATIO;
     // Categoria em cards: as fotos são as dos projetos ou filmes dela.
     const works = (data.works ?? [])
       .filter((work) => category.layout === "cards" && work.category === item.slug)
