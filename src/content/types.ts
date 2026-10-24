@@ -18,6 +18,8 @@ export type Category = {
    * ou filmes, cada um com a sua página.
    */
   layout?: "photos" | "cards";
+  /** Proporção de todas as capas dos cards (ex.: "16 / 9"); sem ela, cada capa fica na proporção dela. */
+  cardRatio?: string;
 };
 
 export type Photo = {

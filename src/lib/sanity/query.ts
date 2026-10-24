@@ -34,6 +34,7 @@ export const siteQuery = `{
     "slug": slug.current,
     description,
     layout,
+    cardShape,
     tags,
     "photos": photos[defined(asset)]{ ${photo} }
   },
@@ -128,6 +129,7 @@ export type SiteQueryResult = {
     slug: string;
     description?: string;
     layout?: "photos" | "cards";
+    cardShape?: "film" | "free";
     tags?: string[];
     photos?: SanityPhoto[] | null;
   }[];

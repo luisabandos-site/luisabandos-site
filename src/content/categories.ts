@@ -30,11 +30,13 @@ export const categories = {
     title: "Projetos",
     description: "Séries pessoais e experimentais. A cidade grita: muros, pichações e o que a rua tem a dizer.",
     layout: "cards",
+    cardRatio: "16 / 9",
   },
   audiovisual: {
     slug: "audiovisual",
     title: "Audiovisual",
     description: "Direção de fotografia, operação e assistência de câmera em clipes, curtas e documentários.",
     layout: "cards",
+    cardRatio: "16 / 9",
   },
 } satisfies Record<string, Category>;
