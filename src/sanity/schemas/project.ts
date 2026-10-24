@@ -10,14 +10,40 @@ export const project = defineType({
   title: "Projeto ou filme",
   type: "document",
   icon: ProjectsIcon,
+  fieldsets: [
+    {
+      name: "credits",
+      title: "Ficha",
+      description: "Aparece à direita do nome, em duas linhas: “Luísa Bandos (2023)” e “curta • doc • 6'33”. Tudo opcional.",
+      options: { columns: 2 },
+    },
+  ],
   fields: [
     defineField({
       name: "title",
       title: "Nome",
-      description: "Aparece no card e no topo da página, dentro da elipse.",
+      description: "Aparece no card e no topo da página.",
       type: "string",
       validation: (rule) => rule.required(),
     }),
+    defineField({
+      name: "role",
+      title: "Função",
+      description: "Embaixo do nome, ex.: “diretora e idealizadora”. Opcional.",
+      type: "string",
+    }),
+    defineField({ name: "direction", title: "Direção", description: "Ex.: Luísa Bandos.", type: "string", fieldset: "credits" }),
+    defineField({
+      name: "year",
+      title: "Ano",
+      description: "Ex.: 2023.",
+      type: "number",
+      fieldset: "credits",
+      validation: (rule) => rule.integer().min(1900).max(2100),
+    }),
+    defineField({ name: "format", title: "Formato", description: "Ex.: curta.", type: "string", fieldset: "credits" }),
+    defineField({ name: "genre", title: "Gênero", description: "Ex.: doc.", type: "string", fieldset: "credits" }),
+    defineField({ name: "duration", title: "Duração", description: "Ex.: 6'33.", type: "string", fieldset: "credits" }),
     defineField({
       name: "category",
       title: "Categoria",
@@ -37,7 +63,7 @@ export const project = defineType({
       name: "text",
       title: "Texto",
       description:
-        "Aparece centralizado no topo da página. Deixe uma linha em branco entre os parágrafos; o trecho entre *asteriscos* fica em itálico. Opcional.",
+        "Aparece no topo da página, à direita (em duas colunas se for longo). Deixe uma linha em branco entre os parágrafos; o trecho entre *asteriscos* fica em itálico. Opcional.",
       type: "text",
       rows: 10,
     }),

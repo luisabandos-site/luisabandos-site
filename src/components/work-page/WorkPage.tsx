@@ -19,7 +19,7 @@ const TWO_COLUMNS_FROM = 400;
 
 /**
  * Página de um projeto ou filme, com a estrutura da página Trabalho: título
- * gigante, filtros (com a categoria do projeto marcada), texto (opcional),
+ * gigante (com a função embaixo e a ficha à direita, como o Sobre mim), filtros (com a categoria do projeto marcada), texto (opcional),
  * vídeo (opcional) e a galeria.
  */
 export function WorkPage({ content, work }: Props) {
@@ -31,7 +31,9 @@ export function WorkPage({ content, work }: Props) {
       <Header brand={content.brand} nav={content.nav} />
       <main>
         <article className={styles.root} data-theme="dark">
-          <PageTitle title={work.title} count={work.photos.length} wrap />
+          <PageTitle title={work.title} subtitle={work.role} count={work.photos.length} align="right" wrap>
+            {work.credits.length > 0 && work.credits.map((line) => <p key={line}>{line}</p>)}
+          </PageTitle>
 
           <WorkFilters page={content.projectsPage} active={work.category} current="location" />
 

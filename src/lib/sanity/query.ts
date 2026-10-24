@@ -41,6 +41,12 @@ export const siteQuery = `{
     title,
     "slug": slug.current,
     "category": category->slug.current,
+    role,
+    direction,
+    year,
+    format,
+    genre,
+    duration,
     cover { ${picture} },
     text,
     link,
@@ -129,6 +135,12 @@ export type SiteQueryResult = {
     title?: string;
     slug: string;
     category: string;
+    role?: string;
+    direction?: string;
+    year?: number;
+    format?: string;
+    genre?: string;
+    duration?: string;
     cover?: SanityPicture | null;
     text?: string;
     link?: LinkValue;

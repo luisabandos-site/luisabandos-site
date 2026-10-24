@@ -11,6 +11,7 @@ export const works: Work[] = [
     slug: "a-cidade-grita",
     title: "a cidade grita.",
     category: categories.projetos,
+    credits: [],
     cover: photos.cidadeGritaDitadura,
     text: [
       "O projeto “a cidade grita.” nasceu em 2019 de forma despretensiosa, com o objetivo de registrar e catalogar pixos encontrados no interior de São Paulo. O projeto cresceu, se desenvolveu e encontrou significado em si mesmo.",

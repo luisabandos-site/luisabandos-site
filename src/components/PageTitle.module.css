@@ -44,6 +44,14 @@
   opacity: 0.6;
 }
 
+/* Mesmo tamanho dos títulos de "O que eu faço" no Sobre mim. */
+.subtitle {
+  margin-top: 24px;
+  font-size: clamp(28px, 2.08vw, 48px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
 .aside {
   flex: 0 1 420px;
   margin-bottom: -14px;
@@ -70,8 +78,18 @@
     font-size: 18vw;
   }
 
+  /* Uma palavra comprida (ex.: "reminiscência") diminui até caber na largura. */
+  .title[data-wrap] {
+    font-size: min(18vw, (100vw - 2 * var(--margin)) / (var(--longest-word) * 0.5));
+  }
+
   .title[data-long] {
-    font-size: 11vw;
+    font-size: min(11vw, (100vw - 2 * var(--margin)) / (var(--longest-word) * 0.5));
+  }
+
+  .subtitle {
+    margin-top: 16px;
+    font-size: 24px;
   }
 
   .aside,
