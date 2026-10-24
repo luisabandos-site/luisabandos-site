@@ -7,12 +7,16 @@
   border-bottom: 1px solid var(--line, var(--line-dark));
 }
 
-/* 220px no Figma (1920). */
+/*
+ * 160px numa tela de 1920 (o Figma tinha 220; o felipe pediu menor). Um nome
+ * muito comprido diminui até caber na largura: `--line-chars` é o tamanho da
+ * maior linha que não quebra, e cada letra ocupa no máximo meia altura.
+ */
 .title {
   display: flex;
   align-items: flex-start;
   margin-left: -0.027em;
-  font-size: clamp(64px, 11.46vw, 260px);
+  font-size: min(clamp(48px, 8.33vw, 190px), (100vw - 2 * var(--margin)) / (var(--line-chars) * 0.5));
   font-weight: 400;
   line-height: 0.85;
   letter-spacing: -0.05em;
@@ -36,8 +40,9 @@
   line-height: 0.9;
 }
 
+/* Afastado o bastante para o "f" final (que sobra para a direita) não encostar. */
 .count {
-  margin: 0.1em 0 0 0.03em;
+  margin: 0.1em 0 0 0.8em;
   font-size: max(14px, 0.109em);
   line-height: 1.2;
   letter-spacing: -0.04em;
@@ -74,13 +79,20 @@
     padding-bottom: 40px;
   }
 
+  /*
+   * No celular o título é menor (13vw, eram 18vw) e quebra linha (ex.: "Still e /
+   * making of") em vez de passar da tela; uma palavra comprida diminui até caber.
+   */
   .title {
-    font-size: 18vw;
+    display: block;
+    white-space: normal;
+    text-wrap: balance;
+    font-size: min(13vw, (100vw - 2 * var(--margin)) / (var(--longest-word) * 0.5));
   }
 
-  /* Uma palavra comprida (ex.: "reminiscência") diminui até caber na largura. */
-  .title[data-wrap] {
-    font-size: min(18vw, (100vw - 2 * var(--margin)) / (var(--longest-word) * 0.5));
+  .title .count {
+    display: inline-block;
+    vertical-align: top;
   }
 
   .title[data-long] {

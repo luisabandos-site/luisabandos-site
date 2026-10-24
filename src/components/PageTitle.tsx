@@ -30,7 +30,12 @@ export function PageTitle({ title, subtitle, count, children, align = "left", wr
           className={styles.title}
           data-wrap={wrap || undefined}
           data-long={(wrap && title.length > LONG_TITLE) || undefined}
-          style={wrap ? ({ "--longest-word": longestWord(title) } as React.CSSProperties) : undefined}
+          style={
+            {
+              "--longest-word": longestWord(title),
+              "--line-chars": wrap ? longestWord(title) : title.length,
+            } as React.CSSProperties
+          }
         >
           {title}
           {count !== undefined && <span className={styles.count}>({pad(count)})</span>}
