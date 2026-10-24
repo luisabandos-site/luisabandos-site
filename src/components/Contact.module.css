@@ -92,6 +92,17 @@
   background-size: 100% 1px;
 }
 
+/* Seta do "Enviar mensagem" do WhatsApp, como a do botão de cima. */
+.channelArrow {
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.channelLink:hover .channelArrow {
+  transform: translateX(4px);
+}
+
 .name {
   margin-top: -8px;
 }

@@ -1,5 +1,6 @@
 import type { Category, Link, Photo, SiteContent, Work } from "@/content/types";
 import { categoryHref, workHref } from "@/lib/routes";
+import { hidePhone } from "@/lib/whatsapp";
 import type { SanityPhoto, SanityPicture, SiteQueryResult } from "./query";
 
 /**
@@ -181,7 +182,7 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
       cta: link(settings.contact?.cta),
       channels: (settings.contact?.channels ?? []).map((channel) => ({
         label: text(channel.label),
-        items: (channel.items ?? []).map(link),
+        items: (channel.items ?? []).map(link).map(hidePhone),
       })),
     };
     content.footer = {

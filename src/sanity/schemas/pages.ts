@@ -226,7 +226,14 @@ export const settings = defineType({
               name: "channel",
               fields: [
                 defineField({ name: "label", title: "Título", type: "string" }),
-                defineField({ name: "items", title: "Linhas", type: "array", of: [defineArrayMember({ type: "link" })] }),
+                defineField({
+                  name: "items",
+                  title: "Linhas",
+                  description:
+                    "WhatsApp: o número não aparece no site. Coloque o link (https://wa.me/55 + DDD + número) em Link e o texto, ex.: “Enviar mensagem”, em Texto.",
+                  type: "array",
+                  of: [defineArrayMember({ type: "link" })],
+                }),
               ],
               preview: { select: { title: "label" } },
             }),

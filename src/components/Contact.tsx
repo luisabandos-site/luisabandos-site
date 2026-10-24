@@ -1,4 +1,5 @@
 import type { SiteContent } from "@/content/types";
+import { isWhatsApp } from "@/lib/whatsapp";
 import { BackToTop } from "./BackToTop";
 import { FitText } from "./FitText";
 import { Reveal } from "./Reveal";
@@ -42,6 +43,11 @@ export function Contact({ contact, footer, name }: Props) {
                       {...(item.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
                     >
                       {item.label}
+                      {isWhatsApp(item.href) && (
+                        <span className={styles.channelArrow} aria-hidden="true">
+                          →
+                        </span>
+                      )}
                     </a>
                   ) : (
                     item.label

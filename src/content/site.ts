@@ -109,7 +109,7 @@ export const site: SiteContent = {
       },
       {
         label: "WhatsApp",
-        items: [{ label: "+55 16 90000-0000", href: "https://wa.me/5516900000000" }],
+        items: [{ label: "Enviar mensagem", href: "https://wa.me/5516900000000" }],
       },
       {
         label: "Redes",
