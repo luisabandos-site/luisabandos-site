@@ -42,6 +42,7 @@ export const siteQuery = `{
     title,
     "slug": slug.current,
     "category": category->slug.current,
+    showInAll,
     role,
     direction,
     year,
@@ -137,6 +138,7 @@ export type SiteQueryResult = {
     title?: string;
     slug: string;
     category: string;
+    showInAll?: boolean;
     role?: string;
     direction?: string;
     year?: number;

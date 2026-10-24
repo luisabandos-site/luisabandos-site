@@ -151,12 +151,14 @@ export function toSiteContent(data: SiteQueryResult | null, fallback: SiteConten
           video: work.video || undefined,
           photos: photos.map(({ photo }) => photo),
         };
-        return { work: value, photos };
+        return { work: value, photos, inAll: work.showInAll !== false };
       });
     const photos = category.layout === "cards" ? works.flatMap((entry) => entry.photos) : portfolio(item.photos, category);
-    return { category, tags: item.tags ?? [], photos, works: works.map((entry) => entry.work) };
+    // Galeria de "Todos": sem os projetos ou filmes desligados no painel (ex.: desenhos, +18).
+    const inAll = category.layout === "cards" ? works.filter((entry) => entry.inAll).flatMap((entry) => entry.photos) : photos;
+    return { category, tags: item.tags ?? [], photos, inAll, works: works.map((entry) => entry.work) };
   });
-  const allPhotos = mix(categories.map(({ photos }) => photos.map(({ photo }) => photo)));
+  const allPhotos = mix(categories.map(({ inAll }) => inAll.map(({ photo }) => photo)));
   const homePhotos = mix(
     categories.map(({ photos }) => photos.filter(({ image }) => image.showOnHome).map(({ photo }) => photo)),
   );

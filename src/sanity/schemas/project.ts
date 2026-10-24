@@ -54,6 +54,14 @@ export const project = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "showInAll",
+      title: "Aparecer em Todos",
+      description:
+        "Ligado: as fotos entram na galeria de Todos, na página Trabalho. Desligado: ficam só no card e na página dele (ex.: desenhos, conteúdo +18).",
+      type: "boolean",
+      initialValue: true,
+    }),
+    defineField({
       name: "cover",
       title: "Capa",
       description: "Foto do card. Vazio = a primeira foto da galeria.",
@@ -110,11 +118,12 @@ export const project = defineType({
   ],
   orderings: [{ title: "Posição", name: "order", by: [{ field: "order", direction: "asc" }] }],
   preview: {
-    select: { title: "title", category: "category.title", cover: "cover", photos: "photos" },
-    prepare: ({ title, category, cover, photos }) => {
+    select: { title: "title", category: "category.title", cover: "cover", photos: "photos", showInAll: "showInAll" },
+    prepare: ({ title, category, cover, photos, showInAll }) => {
       const list = Array.isArray(photos) ? photos : [];
       const count = list.length === 1 ? "1 foto" : `${list.length} fotos`;
-      return { title, media: cover?.asset ? cover : list[0], subtitle: [category, count].filter(Boolean).join(" · ") };
+      const hidden = showInAll === false ? "fora de Todos" : "";
+      return { title, media: cover?.asset ? cover : list[0], subtitle: [category, count, hidden].filter(Boolean).join(" · ") };
     },
   },
 });
