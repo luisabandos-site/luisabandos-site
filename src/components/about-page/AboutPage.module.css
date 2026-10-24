@@ -107,9 +107,10 @@
   list-style: none;
 }
 
+/* Coluna do ano com metade do espaço do Figma (660), para os textos não quebrarem. */
 .year {
   display: grid;
-  grid-template-columns: 660fr 1180fr;
+  grid-template-columns: 330fr 1510fr;
   padding: 32px 0 40px;
   border-top: 1px solid var(--line);
 }
@@ -129,7 +130,8 @@
 
 .item {
   display: grid;
-  grid-template-columns: 620fr 300fr 260fr;
+  grid-template-columns: 800fr 300fr 410fr;
+  column-gap: 24px;
   align-items: baseline;
 }
 
@@ -181,6 +183,19 @@
     gap: 48px 20px;
   }
 
+  /* Nome numa linha; tipo e função embaixo, nas pontas. */
+  .item {
+    grid-template-columns: 1fr auto;
+    row-gap: 4px;
+  }
+
+  .itemName {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Em telas médias o ano vai para cima e as linhas usam a largura toda. */
+@media (max-width: 1279px) {
   .year {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -260,13 +275,7 @@
     gap: 16px;
   }
 
-  .item {
-    grid-template-columns: 1fr auto;
-    row-gap: 4px;
-  }
-
   .itemName {
-    grid-column: 1 / -1;
     font-size: 20px;
   }
 
