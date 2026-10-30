@@ -1,4 +1,5 @@
 import { preconnect } from "react-dom";
+import { Analytics } from "@vercel/analytics/next";
 import { getSiteContent } from "@/lib/content";
 import { isSanityImage } from "@/lib/sanity/image";
 import { heroSizes, portraitSizes } from "@/lib/sizes";
@@ -19,12 +20,16 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   ];
 
   return (
-    <SmoothScroll>
-      <PageTransition brand={brand}>
-        <IntroProvider brand={brand} critical={critical}>
-          <LightboxProvider>{children}</LightboxProvider>
-        </IntroProvider>
-      </PageTransition>
-    </SmoothScroll>
+    <>
+      <SmoothScroll>
+        <PageTransition brand={brand}>
+          <IntroProvider brand={brand} critical={critical}>
+            <LightboxProvider>{children}</LightboxProvider>
+          </IntroProvider>
+        </PageTransition>
+      </SmoothScroll>
+      {/* Visitas do site na aba Analytics da Vercel (o painel /studio fica de fora). */}
+      <Analytics />
+    </>
   );
 }
