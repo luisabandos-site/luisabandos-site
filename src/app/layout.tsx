@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { getSiteContent } from "@/lib/content";
 import { INTRO_SEEN_KEY } from "@/components/intro/constants";
 import { pageMetadata, SITE_URL } from "@/lib/seo";
@@ -45,7 +46,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: introScript }} />
         <noscript dangerouslySetInnerHTML={{ __html: noScriptStyle }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
